@@ -3,7 +3,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
 
 %environment
     export DEPS_DIR=/software
-    export PATH="$DEPS_DIR/bin:$PATH"
+    export PATH="$DEPS_DIR/fcm/bin:$DEPS_DIR/bin:$PATH"
     export NETCDF=$DEPS_DIR
     export HDF5=$DEPS_DIR
     export PNETCDF=$DEPS_DIR
@@ -95,14 +95,14 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     export LD_LIBRARY_PATH="$DEPS_DIR/lib:$LD_LIBRARY_PATH"
 
     mkdir -p $DEPS_DIR
+    mkdir -p ${DEPS_DIR}/bin
 
     # FCM
     cd $DEPS_DIR
     wget https://github.com/metomi/fcm/archive/refs/tags/${FCM_VERSION}.tar.gz
     tar xf ${FCM_VERSION}.tar.gz
-    mkdir -p ${DEPS_DIR}/bin
-    ln -s ${DEPS_DIR}/fcm-${FCM_VERSION}/bin/fcm ${DEPS_DIR}/bin/fcm
-
+    rm ${FCM_VERSION}.tar.gz
+    mv fcm-${FCM_VERSION} fcm
 
     # libpng
     cd $DEPS_DIR
