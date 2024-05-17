@@ -10,7 +10,7 @@ module system used on many high performance computers to load in dependencies.
 
 ## How to build a container
 
-First you need to have Apptainer installed. If you're running Linux, you're in luck, just follow the (instructions)[https://apptainer.org/docs/user/latest/]. On Windows, you can use Windows Linux Subsystem (WSL).
+First you need to have Apptainer installed. If you're running Linux, you're in luck, just follow these [instructions](https://apptainer.org/docs/user/latest/). On Windows, you can use Windows Linux Subsystem (WSL).
 
 A container needs a definition file, e.g. `conf/nzesmenv.def`. This file lists the operating system, the compilers and the steps to build the libraries. It is a recipe for building the container.
 
