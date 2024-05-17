@@ -1,16 +1,16 @@
 # nzesm_apptainer
-Definition files for creating an Apptainer environment for NZESM
+Definition files for creating an NZESM Apptainer environment
 
 ## Introduction
 
 Containerisation allows you to compile code that can be easily ported from one platform to another (with some restrictions). As the name suggests, all the dependencies are contained -- there are no undefined references.
 
-The container below comes with an operating system, compilers, and libraries, including MPI. It can be thought as a replacement of the 
-module system used on many high performance computers to load in dependencies. 
+The container `nzesmenv` described below comes with an operating system, compilers, and libraries, including MPI. It can be thought as a replacement for the 
+modules used on many high performance computers to load in dependencies (toolchain, NetCDF, etc). 
 
 ## How to build a container
 
-First you need to have Apptainer installed. If you're running Linux, you're in luck, just follow these [instructions](https://apptainer.org/docs/user/latest/). On Windows, you can use Windows Linux Subsystem (WSL).
+First you need to have Apptainer installed. If you're running Linux, you're in luck, just follow these [instructions](https://apptainer.org/docs/user/latest/). On Windows, you can use Windows Linux Subsystem (WSL) and on Mac you might have to install Apptainer within a Docker environment. 
 
 A container needs a definition file, e.g. `conf/nzesmenv.def`. This file lists the operating system, the compilers and the steps to build the libraries. It is a recipe for building the container.
 
@@ -19,6 +19,8 @@ To build the container, type
 apptainer build nzesmenv.sif conf/nzesmenv.def
 ```
 Now take a cup of coffee. 
+
+### Building the container on NeSI
 
 If you don't have access to a Linux system with Apptainer installed, you can also [build the container on Mahuika](https://support.nesi.org.nz/hc/en-gb/articles/6008779241999-Build-an-Apptainer-container-on-a-Milan-compute-node) by submitting the follwowing SLURM job
 ```
@@ -54,7 +56,7 @@ Assuming you have loaded the `Apptainer` module on Mahuika (or have the command 
 ```
 apptainer shell nzesmenv.sif
 ```
-This will land you in an environment with compilers
+will land you in an environment with compilers
 ```
 Apptainer> which mpiifort
 /opt/intel/oneapi/compiler/2023.0.0/linux/bin/intel64/ifort
