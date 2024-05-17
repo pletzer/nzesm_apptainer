@@ -116,12 +116,13 @@ apptainer exec nzesmenv.sif mpiexec -n 4 ./myapp
 ```
 or use the hosts's MPI. In the latter case, the MPI versions inside and on the host must be compatible. On NeSI's Mahuika we recommend to use the Intel MPI. In this case your SLURM script would look like:
 ```
+cat > myapp.sl << EOF
 #!/bin/bash -e
 #SBATCH --job-name=runCase14       # job name (shows up in the queue)
 #SBATCH --time=01:00:00       # Walltime (HH:MM:SS)
 #SBATCH --hint=nomultithread
 #SBATCH --mem-per-cpu=2g             # memory (in MB)
-#SBATCH --ntasks=112         # number of tasks (e.g. MPI)
+#SBATCH --ntasks=10        # number of tasks (e.g. MPI)
 #SBATCH --cpus-per-task=1     # number of cores per task (e.g. OpenMP)
 #SBATCH --output=%x-%j.out    # %x and %j are replaced by job name and ID
 #SBATCH --error=%x-%j.err
@@ -133,12 +134,9 @@ ml Apptainer
 module load intel        # load the Intel MPI
 export I_MPI_FABRICS=ofi # turn off shm to run on multiple nodes
 
-
-SIF_FILE="/nesi/nobackup/pletzera/tmp/coupled_model_apptainer/esmfenv86.sif"
-ESMF_APP="/nesi/nobackup/pletzera/tmp/coupled_model_apptainer/pskrips/models/PSKRIPS/PSKRIPSv2/coupledCode/esmf_application"
-
-rm -f PET*LogFile
-srun apptainer exec -B /opt/slurm/lib64/ nzesmfenv.sif .
+srun apptainer exec -B /opt/slurm/lib64/ nzesmfenv.sif ./myapp
+EOF
+sbatch myapp.sl
 ```
 
 
