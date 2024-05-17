@@ -128,7 +128,7 @@ ml purge
 ml Apptainer
 
 module load intel        # load the Intel MPI
-export I_MPI_FABRICS=ofi # turn off shm to allow the code to run on multiple nodes
+export I_MPI_FABRICS=ofi # turn off shm to run on multiple nodes
 
 
 SIF_FILE="/nesi/nobackup/pletzera/tmp/coupled_model_apptainer/esmfenv86.sif"
