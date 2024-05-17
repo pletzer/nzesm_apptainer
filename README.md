@@ -67,12 +67,76 @@ If you want to run the `nc-config` command, for example,
 apptainer exec nzesmenv.sif nc-config
 ``` 
 
-##
-
-
 ## How to compile an application using the containerised environment
 
 When running `apptainer shell` on Mahuika, directories (`$HOME`, `/nesi/project`, `/nesi/nobackup`) are mounted by default, Additional directories can be mounted with the `-B <dir>` option. 
+
+You can use the compilers inside the container to compile your application. In the example below we compile a simple MPI C application
+```
+cat > myapp.c << EOF
+#include <mpi.h>
+#include <stdio.h>
+
+int main(int argc, char** argv) {
+    // Initialize the MPI environment
+    MPI_Init(NULL, NULL);
+
+    // Get the number of processes
+    int world_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+
+    // Get the rank of the process
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+
+    // Get the name of the processor
+    char processor_name[MPI_MAX_PROCESSOR_NAME];
+    int name_len;
+    MPI_Get_processor_name(processor_name, &name_len);
+
+    // Print off a hello world message
+    printf("Hello world from processor %s, rank %d out of %d processors\n",
+           processor_name, world_rank, world_size);
+
+    // Finalize the MPI environment.
+    MPI_Finalize();
+}
+EOF
+apptainer exec nzesmfenv.sif mpicc myapp.c -o myapp
+```
+
+## Running a containerised MPI application
+
+You can either leverage the MPI inside the application
+```
+apptainer exec mpiexec -n 4 ./myapp
+```
+or use the hosts's MPI. In the latter case, the MPI versions inside and on the host must be compatible. On NeSI's Mahuika we recommend to use the Intel MPI. In this case your SLURM script would look like:
+```
+#!/bin/bash -e
+#SBATCH --job-name=runCase14       # job name (shows up in the queue)
+#SBATCH --time=01:00:00       # Walltime (HH:MM:SS)
+#SBATCH --hint=nomultithread
+#SBATCH --mem-per-cpu=2g             # memory (in MB)
+#SBATCH --ntasks=112         # number of tasks (e.g. MPI)
+#SBATCH --cpus-per-task=1     # number of cores per task (e.g. OpenMP)
+#SBATCH --output=%x-%j.out    # %x and %j are replaced by job name and ID
+#SBATCH --error=%x-%j.err
+#SBATCH --partition=milan
+
+ml purge
+ml Apptainer
+
+module load intel        # load the Intel MPI
+export I_MPI_FABRICS=ofi # turn off shm to allow the code to run on multiple nodes
+
+
+SIF_FILE="/nesi/nobackup/pletzera/tmp/coupled_model_apptainer/esmfenv86.sif"
+ESMF_APP="/nesi/nobackup/pletzera/tmp/coupled_model_apptainer/pskrips/models/PSKRIPS/PSKRIPSv2/coupledCode/esmf_application"
+
+rm -f PET*LogFile
+srun apptainer exec -B /opt/slurm/lib64/ nzesmfenv.sif .
+```
 
 
 
