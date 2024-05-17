@@ -12,20 +12,20 @@ module system used on many high performance computers to load in dependencies.
 
 First you need to have Apptainer installed. If you're running Linux, you're in luck, just follow the (instructions)[https://apptainer.org/docs/user/latest/]. On Windows, you can use Windows Linux Subsystem (WSL).
 
-A container needs a definition file, e.g. `conf/nzesmenv.def`. This file lists the operating system, the compilers and the steps to build the libraries. It is a recipe to build the container.
+A container needs a definition file, e.g. `conf/nzesmenv.def`. This file lists the operating system, the compilers and the steps to build the libraries. It is a recipe for building the container.
 
 To build the container, type
 ```
 apptainer build nzesmenv.sif conf/nzesmenv.def
 ```
-which may take of the order of one hour to build. 
+Now take a cup of coffee. 
 
 If you don't have access to a Linux system with Apptainer installed, you can also (build the container on Mahuika)[https://support.nesi.org.nz/hc/en-gb/articles/6008779241999-Build-an-Apptainer-container-on-a-Milan-compute-node] by submitting the follwowing SLURM job
 ```
 #!/bin/bash -e
 #SBATCH --job-name=apptainer_build
 #SBATCH --partition=milan
-#SBATCH --time=0-02:00:00
+#SBATCH --time=0-03:00:00
 #SBATCH --mem=30GB
 #SBATCH --cpus-per-task=2
 
@@ -59,6 +59,7 @@ This will land you in an environment with compilers
 Apptainer> which mpiifort
 /opt/intel/oneapi/compiler/2023.0.0/linux/bin/intel64/ifort
 ```
+and other tools installed.
 
 ## How to run a command inside the container
 
