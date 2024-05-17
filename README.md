@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
     MPI_Finalize();
 }
 EOF
-apptainer exec nzesmfenv.sif mpicc myapp.c -o myapp
+apptainer exec nzesmenv.sif mpicc myapp.c -o myapp
 ```
 
 ## Running a containerised MPI application
