@@ -134,7 +134,7 @@ ml Apptainer
 module load intel        # load the Intel MPI
 export I_MPI_FABRICS=ofi # turn off shm to run on multiple nodes
 
-srun apptainer exec -B /opt/slurm/lib64/ nzesmfenv.sif ./myapp
+srun apptainer exec -B /opt/slurm/lib64/ nzesmenv.sif ./myapp
 EOF
 sbatch myapp.sl
 ```
