@@ -20,7 +20,7 @@ apptainer build nzesmenv.sif conf/nzesmenv.def
 ```
 Now take a cup of coffee. 
 
-If you don't have access to a Linux system with Apptainer installed, you can also (build the container on Mahuika)[https://support.nesi.org.nz/hc/en-gb/articles/6008779241999-Build-an-Apptainer-container-on-a-Milan-compute-node] by submitting the follwowing SLURM job
+If you don't have access to a Linux system with Apptainer installed, you can also [build the container on Mahuika](https://support.nesi.org.nz/hc/en-gb/articles/6008779241999-Build-an-Apptainer-container-on-a-Milan-compute-node) by submitting the follwowing SLURM job
 ```
 #!/bin/bash -e
 #SBATCH --job-name=apptainer_build
