@@ -109,7 +109,7 @@ apptainer exec nzesmenv.sif mpicc myapp.c -o myapp
 
 You can either leverage the MPI inside the application
 ```
-apptainer exec mpiexec -n 4 ./myapp
+apptainer exec nzesmenv.sif mpiexec -n 4 ./myapp
 ```
 or use the hosts's MPI. In the latter case, the MPI versions inside and on the host must be compatible. On NeSI's Mahuika we recommend to use the Intel MPI. In this case your SLURM script would look like:
 ```
