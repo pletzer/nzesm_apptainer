@@ -61,7 +61,54 @@ will land you in an environment with compilers
 Apptainer> which mpiifort
 /opt/intel/oneapi/compiler/2023.0.0/linux/bin/intel64/ifort
 ```
-and other tools installed.
+and other tools installed. Installed dependencies live under `/software/{include,lib,bin}`. FCM has has been installed and is accessible,
+```
+libhdf5.la         libhdf5_hl.la               libjasper.a                   libnetcdf_c++4.so.1  libpng.la                libshum_constants.a  libshum_latlon_eq_grids.so          libsz.a
+Apptainer> fcm
+FCM 2021.05.0 (/software/fcm)
+Usage:
+        fcm [APPLICATION] [OPTIONS] [ARGUMENTS]
+
+Arguments:
+    fcm provides the following applications:
+
+        branch-create, bcreate, bc
+        branch-delete, bdelete, bdel, brm
+        branch-diff, bdiff, bdi
+        branch-info, binfo
+        branch-list, bls
+        browse, trac, www
+        build
+        cfg-print, cfg
+        cmp-ext-cfg
+        conflicts, cf
+        export-items
+        extract
+        gui
+        keyword-print, kp
+        loc-layout
+        make
+        mkpatch
+        test-battery
+
+    fcm overrides the following svn applications:
+
+        add
+        commit, ci
+        delete, del, remove, rm
+        diff, di
+        merge
+        switch, sw
+        update, up
+
+    fcm explicitly doesn't support the following svn applications:
+
+        changelist
+
+    Type "fcm help APPLICATION" for help on individual application.
+
+    Type "svn help APPLICATION" for help on other svn application.
+```
 
 ## How to run a command inside the container
 
