@@ -45,6 +45,13 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     apt -y install vim
     apt -y install subversion
 
+    # cylc
+    apt -y install python3-dev
+    apt -y install python3-pip
+    apt -y install npm
+    apt -y install nodejs
+    apt -y install python3-graphviz
+
     # apr is causing some issues with perl -MCPAN -e 'install SVN::Client'
     #apt -y install libapr1-dev libaprutil1-dev
 
@@ -64,7 +71,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
 
     # versions
     FCM_VERSION="2021.05.0"
-    HDF5_VERSION="1.12.2"
+    HDF5_VERSION="1.14.3"
     NETCDF_C_VERSION="4.9.2"
     NETCDF_FORTRAN_VERSION="4.6.1"
     NETCDF_CXX_VERSION="4.3.1"
@@ -104,6 +111,12 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     tar xf ${FCM_VERSION}.tar.gz
     rm ${FCM_VERSION}.tar.gz
     mv fcm-${FCM_VERSION} fcm
+    
+    # Cylc
+    pip install cylc-flow
+    pip install cylc-uiserver
+    pip install cylc-rose metomi-rose
+    npm install configurable-http-proxy
 
     # libpng
     cd $DEPS_DIR
@@ -357,7 +370,5 @@ F2C_LDFLAGS = $(F2C_LIBS)
     # make install
     # cd ../..
     # rm -rf grib_api-${GRIB_API_VERSION}
-
-
 
 
