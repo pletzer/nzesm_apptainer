@@ -27,7 +27,7 @@ If you don't have access to a Linux system with Apptainer installed, you can als
 #!/bin/bash -e
 #SBATCH --job-name=apptainer_build
 #SBATCH --partition=milan
-#SBATCH --time=0-03:00:00
+#SBATCH --time=0-04:00:00
 #SBATCH --mem=30GB
 #SBATCH --cpus-per-task=2
 

@@ -1,7 +1,7 @@
 #!/bin/bash -e
 #SBATCH --job-name=apptainer_build
 #SBATCH --partition=milan
-#SBATCH --time=0-04:00:00
+#SBATCH --time=04:00:00
 #SBATCH --mem=30GB
 #SBATCH --cpus-per-task=2
 
