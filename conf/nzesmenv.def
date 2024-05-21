@@ -285,6 +285,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     git checkout OASIS3-MCT_$OASIS_MCT_VERSION
     cd util/make_dir
 
+    rm -f make.inc make.intel_intelmpi
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/oasis/packages/oasis3-mct/make.inc
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/oasis/packages/oasis3-mct/make.intel_intelmpi
 
