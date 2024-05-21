@@ -300,7 +300,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     cd XIOS
     branch="xios"
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/arch-ifort_apptainer.* arch/
-    ./make_xios --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct
+    ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct
     
 
 
