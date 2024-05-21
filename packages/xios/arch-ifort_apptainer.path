@@ -1,0 +1,10 @@
+NETCDF_INCDIR="-I $NETCDF/include"
+NETCDF_LIBDIR="-L $NETCDF/lib"
+NETCDF_LIB="-lnetcdff -lnetcdf"
+HDF5_INCDIR="-I $HDF5/include"
+HDF5_LIBDIR="-L$HDF5/lib" 
+HDF5_LIB="-lhdf5_hl -lhdf5 -lhdf5 -lz -lcurl"
+OASIS_INCDIR="-I $DEPS_DIR/oasis3-mct/INSTALL_OASIS/include"
+OASIS_LIBDIR="-L$DEPS_DIR/oasis3-mct/INSTALL_OASIS/lib"
+OASIS_LIB="-lpsmile.MPI1 -lscrip -lmct -lmpeu"
+
