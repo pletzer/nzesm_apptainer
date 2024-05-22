@@ -4,6 +4,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
 %environment
     export DEPS_DIR=/software
     export PATH="$DEPS_DIR/fcm/bin:$DEPS_DIR/bin:$PATH"
+    export LD_LIBRARY_PATH="$DEPS_DIR/lib:$LD_LIBRARY_PATH"
     export NETCDF=$DEPS_DIR
     export HDF5=$DEPS_DIR
     export PNETCDF=$DEPS_DIR
