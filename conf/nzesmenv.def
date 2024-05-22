@@ -82,6 +82,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     ECCODES_VERSION="2.35.0"
     SHUMLIB_VERSION="13.0"
     OASIS_MCT_VERSION="5.1"
+    XIOS_VERSION="2024-05-21"
 
     export DEPS_DIR=/software
 
@@ -293,5 +294,13 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     cp ../../INSTALL_OASIS/lib/*.a $DEPS_DIR/lib
     # no module/include files to copy?
 
+    # XIOS
+    cd $DEPS_DIR
+    svn co -r{${XIOS_VERSION}} http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS
+    cd XIOS
+    branch="xios"
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/arch-ifort_apptainer.* arch/
+    ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct
+    
 
 
