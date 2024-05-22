@@ -297,9 +297,12 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     # XIOS
     cd $DEPS_DIR
     svn co -r{${XIOS_VERSION}} http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS
-    cd XIOS
+    cd XIOS/arch
     branch="xios"
-    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/arch-ifort_apptainer.* arch/
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/arch-ifort_apptainer.env
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/arch-ifort_apptainer.fcm
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/arch-ifort_apptainer.path
+    cd ..
     ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct
     
 
