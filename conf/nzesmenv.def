@@ -286,12 +286,12 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     cd util/make_dir
 
     rm -f make.inc make.intel_intelmpi
-    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/oasis/packages/oasis3-mct/make.inc
-    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/oasis/packages/oasis3-mct/make.intel_intelmpi
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.inc
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.intel_intelmpi
 
     make -f TopMakefileOasis3 static-libs-fortran
     cp ../../INSTALL_OASIS/lib/*.a $DEPS_DIR/lib
-    # now module/include files to copy?
+    # no module/include files to copy?
 
 
 
