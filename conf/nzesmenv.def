@@ -4,6 +4,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
 %environment
     export DEPS_DIR=/software
     export PATH="$DEPS_DIR/fcm/bin:$DEPS_DIR/bin:$PATH"
+    export LD_LIBRARY_PATH="$DEPS_DIR/lib:$LD_LIBRARY_PATH"
     export NETCDF=$DEPS_DIR
     export HDF5=$DEPS_DIR
     export PNETCDF=$DEPS_DIR
@@ -82,6 +83,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     ECCODES_VERSION="2.35.0"
     SHUMLIB_VERSION="13.0"
     OASIS_MCT_VERSION="5.1"
+    XIOS_VERSION="2024-05-21"
 
     export DEPS_DIR=/software
 
@@ -286,12 +288,23 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     cd util/make_dir
 
     rm -f make.inc make.intel_intelmpi
-    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/oasis/packages/oasis3-mct/make.inc
-    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/oasis/packages/oasis3-mct/make.intel_intelmpi
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.inc
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.intel_intelmpi
 
     make -f TopMakefileOasis3 static-libs-fortran
     cp ../../INSTALL_OASIS/lib/*.a $DEPS_DIR/lib
     # now module/include files to copy?
 
+    # XIOS
+    cd $DEPS_DIR
+    svn co -r{${XIOS_VERSION}} http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS
+    cd XIOS/arch
+    branch="xios"
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.env
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.fcm
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.path
+    cd ..
+    ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct
+    
 
 
