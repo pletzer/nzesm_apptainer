@@ -29,7 +29,7 @@ If you don't have access to a Linux system with Apptainer installed, you can als
 #SBATCH --partition=milan
 #SBATCH --time=0-04:00:00
 #SBATCH --mem=30GB
-#SBATCH --cpus-per-task=2
+#SBATCH --cpus-per-task=4
 
 # load environment module
 module purge
@@ -184,6 +184,17 @@ export I_MPI_FABRICS=ofi # turn off shm to run on multiple nodes
 srun apptainer exec -B /opt/slurm/lib64/ nzesmenv.sif ./myapp
 EOF
 sbatch myapp.sl
+```
+
+## Caching your password when using rose
+
+Container `nzesmenv.sif` comes with fcm, cylc and rose installed. To access the remote Met Office repos in password-less fashion, you will need to have an account on [MOSRS](https://code.metoffice.gov.uk/trac/home). Rose tasks may require you to have your password cached. To cache your password when using `rose` in the container, do
+```bash
+Apptainer> source /software/rose/bin/mosrs-setup-gpg-agent
+```
+You may need to enter your password twice. Check that your password has been cached with
+```bash
+Apptainer> rose hello
 ```
 
 
