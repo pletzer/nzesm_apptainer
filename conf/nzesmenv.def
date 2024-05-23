@@ -49,7 +49,10 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     apt -y install subversion
     # rose
     apt -y install xserver-xorg
-    apt -y install xserver-xorg
+    apt -y install x11-apps
+    apt -y install x11-utils
+    apt -y install x11-xfs-utils
+    apt -y install x11-xserver-utils
     # cylc
     apt -y install python3-dev
     apt -y install python3-pip
