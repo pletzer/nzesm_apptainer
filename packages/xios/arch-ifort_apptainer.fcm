@@ -1,6 +1,6 @@
 %CCOMPILER           mpiicc
 %FCOMPILER           mpiifort
-%LINKER              mpiifort -nofor-maina -qopenmp
+%LINKER              mpiifort -nofor-main -qopenmp
 
 %BASE_CFLAGS    -std=c++11 -qopenmp
 %PROD_CFLAGS    -O3 -D BOOST_DISABLE_ASSERTS
