@@ -222,7 +222,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     cd build
     CC=$CC CXX=$CXX CPPFLAGS="$(${DEPS_DIR}/bin/nc-config --cflags)" LDFLAGS="$(${DEPS_DIR}/bin/nc-config --libs)" \
     ../configure --prefix=$DEPS_DIR
-    make
+    make -j 4
     make install
     cd ../..
     rm -rf netcdf-cxx4-${NETCDF_CXX_VERSION}
@@ -255,7 +255,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     mkdir build
     cd build/
     FC=$FC CC=$CC CXX=$CXX  cmake -D CMAKE_INSTALL_PREFIX=$DEPS_DIR ..
-    make
+    make -j 4
     make install
     cd ../..
     rm -rf libaec-v${LIBAEC_VERSION}
@@ -269,7 +269,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     mkdir build
     cd build
     FC=$FC CC=$CC CXX=$CXX cmake -D CMAKE_INSTALL_PREFIX=$DEPS_DIR ..
-    make 
+    make -j 4
     make install
     cd ../..
     rm -rf eccodes-${ECCODES_VERSION}-Source
@@ -323,7 +323,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.fcm
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.path
     cd ..
-    ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct
+    ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct --job 4
     
 
 
