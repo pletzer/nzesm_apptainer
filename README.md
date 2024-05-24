@@ -194,7 +194,7 @@ Apptainer> source /software/rose/bin/mosrs-setup-gpg-agent
 ```
 You may need to enter your password twice. Check that your password has been cached with
 ```bash
-Apptainer> rose hello
+Apptainer> rosie hello
 ```
 
 
