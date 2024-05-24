@@ -118,7 +118,7 @@ apptainer exec nzesmenv.sif nc-config
 
 ## How to compile an application using the containerised environment
 
-When running `apptainer shell` on Mahuika, directories (`$HOME`, `/nesi/project`, `/nesi/nobackup`) are mounted by default, Additional directories can be mounted with the `-B <dir>` option. 
+When running `apptainer shell` on Mahuika, directories (`$HOME`, `/nesi/project`, `/nesi/nobackup`) are mounted by default. Additional directories can be mounted with the `-B <dir>` option. 
 
 You can use the compilers inside the container to compile your application. In the example below we compile a simple MPI C application
 ```
