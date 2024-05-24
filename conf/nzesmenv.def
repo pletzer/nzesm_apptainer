@@ -2,7 +2,6 @@ BootStrap: docker
 From: intel/oneapi-hpckit:devel-ubuntu22.04
 
 %environment
-    export VERSION="$Id: $"
     export DEPS_DIR=/software
     export PATH="$DEPS_DIR/fcm/bin:$DEPS_DIR/bin:$DEPS_DIR/rose/bin:$PATH
     expor"t LD_LIBRARY_PATH="$DEPS_DIR/lib:$LD_LIBRARY_PATH"
