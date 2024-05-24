@@ -63,7 +63,6 @@ Apptainer> which mpiifort
 ```
 and other tools installed. Installed dependencies live under `/software/{include,lib,bin}`. FCM has has been installed and is accessible,
 ```
-libhdf5.la         libhdf5_hl.la               libjasper.a                   libnetcdf_c++4.so.1  libpng.la                libshum_constants.a  libshum_latlon_eq_grids.so          libsz.a
 Apptainer> fcm
 FCM 2021.05.0 (/software/fcm)
 Usage:
