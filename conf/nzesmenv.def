@@ -3,8 +3,8 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
 
 %environment
     export DEPS_DIR=/software
-    export PATH="$DEPS_DIR/fcm/bin:$DEPS_DIR/bin:$HOME/bin:$PATH"
-    export LD_LIBRARY_PATH="$DEPS_DIR/lib:$LD_LIBRARY_PATH"
+    export PATH="$DEPS_DIR/fcm/bin:$DEPS_DIR/bin:$DEPS_DIR/rose/bin:$PATH
+    expor"t LD_LIBRARY_PATH="$DEPS_DIR/lib:$LD_LIBRARY_PATH"
     export NETCDF=$DEPS_DIR
     export HDF5=$DEPS_DIR
     export PNETCDF=$DEPS_DIR
@@ -129,6 +129,15 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     pip install cylc-rose metomi-rose
     npm install configurable-http-proxy
 
+    # install the mosr config scripts
+    cd $DEPS_DIR
+    mkdir -p rose/bin
+    cd rose/bin
+    branch="improve"
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/rose/mosrs-cache-password
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/rose/mosrs-setup-gpg-agent
+
+
     # libpng
     cd $DEPS_DIR
     wget https://sourceforge.net/projects/libpng/files/libpng12/1.2.59/libpng-${LIBPNG_VERSION}.tar.xz/download
@@ -213,7 +222,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     cd build
     CC=$CC CXX=$CXX CPPFLAGS="$(${DEPS_DIR}/bin/nc-config --cflags)" LDFLAGS="$(${DEPS_DIR}/bin/nc-config --libs)" \
     ../configure --prefix=$DEPS_DIR
-    make
+    make -j 4
     make install
     cd ../..
     rm -rf netcdf-cxx4-${NETCDF_CXX_VERSION}
@@ -246,7 +255,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     mkdir build
     cd build/
     FC=$FC CC=$CC CXX=$CXX  cmake -D CMAKE_INSTALL_PREFIX=$DEPS_DIR ..
-    make
+    make -j 4
     make install
     cd ../..
     rm -rf libaec-v${LIBAEC_VERSION}
@@ -260,7 +269,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     mkdir build
     cd build
     FC=$FC CC=$CC CXX=$CXX cmake -D CMAKE_INSTALL_PREFIX=$DEPS_DIR ..
-    make 
+    make -j 4
     make install
     cd ../..
     rm -rf eccodes-${ECCODES_VERSION}-Source
@@ -314,7 +323,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.fcm
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.path
     cd ..
-    ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct
+    ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct --job 4
     
 
 
