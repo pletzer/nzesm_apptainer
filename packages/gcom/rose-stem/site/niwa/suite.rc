@@ -1,0 +1,367 @@
+#!jinja2
+
+{# Import macros for parallel and serial variants of the library #}
+{% import 'macros-mpp.rc' as mpp %}
+{% import 'macros-serial.rc' as serial %}
+
+{# name_graphs contains test_option-dependency key-value pairs -#}
+{% set name_graphs = {
+    "apptainer_ifort_build": mpp.dependency_graph_build(PLATFORM='apptainer_ifort') + 
+                             serial.dependency_graph_build(PLATFORM='apptainer_ifort') +
+                             serial.dependency_graph_build(PLATFORM='apptainer_ifort', PRECISION='32B'),
+    "xc50_cray_build" : mpp.dependency_graph_build(PLATFORM='xc50_cray') +
+                        serial.dependency_graph_build(PLATFORM='xc50_cray') +
+                        serial.dependency_graph_build(PLATFORM='xc50_cray', PRECISION='32B'),
+    "xc50_cray_test" : mpp.dependency_graph_test(PLATFORM='xc50_cray') +
+                       serial.dependency_graph_test(PLATFORM='xc50_cray') +
+                       serial.dependency_graph_test(PLATFORM='xc50_cray', PRECISION='32B'),
+    "xc50_ifort_build" : mpp.dependency_graph_build(PLATFORM='xc50_ifort') +
+                         serial.dependency_graph_build(PLATFORM='xc50_ifort') +
+                         serial.dependency_graph_build(PLATFORM='xc50_ifort', PRECISION='32B'),
+    "xc50_ifort_test" : mpp.dependency_graph_test(PLATFORM='xc50_ifort') +
+                        serial.dependency_graph_test(PLATFORM='xc50_ifort') +
+                        serial.dependency_graph_test(PLATFORM='xc50_ifort', PRECISION='32B'),
+    "cs500_gfortran_build" : mpp.dependency_graph_build(PLATFORM='cs500_gfortran') +
+                             serial.dependency_graph_build(PLATFORM='cs500_gfortran') +
+                             serial.dependency_graph_build(PLATFORM='cs500_gfortran', PRECISION='32B'),
+    "cs500_gfortran_test" : mpp.dependency_graph_test(PLATFORM='cs500_gfortran') +
+                            serial.dependency_graph_test(PLATFORM='cs500_gfortran') +
+                            serial.dependency_graph_test(PLATFORM='cs500_gfortran', PRECISION='32B'),
+    "cs500_ifort_build" : mpp.dependency_graph_build(PLATFORM='cs500_ifort') +
+                          serial.dependency_graph_build(PLATFORM='cs500_ifort') +
+                          serial.dependency_graph_build(PLATFORM='cs500_ifort', PRECISION='32B'),
+    "cs500_ifort_test" : mpp.dependency_graph_test(PLATFORM='cs500_ifort') +
+                         serial.dependency_graph_test(PLATFORM='cs500_ifort') +
+                         serial.dependency_graph_test(PLATFORM='cs500_ifort', PRECISION='32B'),
+                  }
+%}
+
+
+{# Set default login nodes for Maui #}
+{% if HOST_XC50 is not defined %}
+{% set HOST_XC50='login.maui.niwa.co.nz' %}
+{% endif %}
+{% if HOST_CS500 is not defined %}
+{% set HOST_CS500='w-clim01.maui.niwa.co.nz' %}
+{% endif %}
+{% if HOST_APPTAINER is not defined %}
+{% set HOST_APPTAINER='w-clim01.maui.niwa.co.nz' %}
+{% endif %}
+
+{# groups contains group_option-trigger_list key-value pairs. -#}
+{# If a group option is set, each group or task in the trigger list will be set. -#}
+{% set groups = {
+    "build_all"   : ["xc50_build", "cs500_build"],
+    "test_all"    : ["xc50_test", "cs500_test"],
+    "apptainer_build": ["apptainer_ifort_build"],
+    "xc50_build" : ["xc50_cray_build", "xc50_ifort_build"],
+    "xc50_test"  : ["xc50_cray_test", "xc50_ifort_test"],
+    "cs500_build" : ["cs500_gfortran_build", "cs500_ifort_build"],
+    "cs500_test"  : ["cs500_gfortran_test", "cs500_ifort_test"],
+    }
+%}
+
+{# 
+
+  Cylc definitions start here
+
+#}
+[cylc]
+    # Timeout handlers
+    [[events]]
+        mail events= timeout
+        abort on timeout = True
+        timeout = PT1H30M # 1.5 hours
+
+[scheduling]
+    [[queues]]
+        [[[niwa_limit_xc50]]]
+            limit = 5
+            members = NIWA_XC50
+        [[[niwa_limit_cs500]]]
+            limit = 5
+            members = NIWA_CS500
+
+    [[dependencies]]
+        graph = """
+{#- Recursively add dependencies from RUN_NAMES, replacing groups with subgroups/tasks #}
+{%- set name_graphs_out = [] %}
+{%- set graphs_out = [] %}
+{%- for name in RUN_NAMES %}
+    {%- set namestack = [name] %}
+    {%- for stackname in namestack recursive %}
+        {%- if stackname in name_graphs %}
+            {%- if name_graphs_out.append(stackname) %}
+            {%- endif %}
+            {%- set outgraph = name_graphs[stackname] %}
+            {%- if outgraph not in graphs_out %}
+            {#- Add new dependency. #}
+{{ outgraph }}
+                {%- if graphs_out.append(outgraph) %}
+                {%- endif %}
+            {%- endif %}
+        {%- elif stackname in groups %}
+        {#- Add the group contents to the stack. #}
+{{ loop(groups[stackname]) }}
+        {%- endif %}
+    {%- endfor %}
+{%- endfor %}
+     """
+
+[runtime]
+# Root, inherited by everything
+    [[root]]
+        init-script = """
+export CYLC_VERSION={{CYLC_VERSION}}
+export ROSE_VERSION={{ROSE_VERSION}}
+export DATE=$(date)
+"""
+        script = rose task-run --verbose
+        env-script = eval $(rose task-env)
+        [[[events]]]
+            mail events = retry, submission failed, submission timeout, execution timeout
+            submission timeout = PT1H # 1 hour
+            execution timeout  = PT1H # 1 hour
+        [[[environment]]]
+            HOST_SOURCE_GCOM = {{ HOST_SOURCE_GCOM }}
+	    HOST_SOURCE_GCOM_BASE = {{ HOST_SOURCE_GCOM_BASE }}
+	    SOURCE_GCOM_REV = {{ SOURCE_GCOM_REV }}
+
+# -------------------------------------------------------------
+# Platform configurations - XC50
+# -------------------------------------------------------------
+
+    [[NIWA_XC50]]
+        [[[remote]]]
+            host = {{HOST_XC50}}
+
+    [[NIWA_XC50_SL]]
+        [[[job]]]
+            batch system = slurm
+        [[[directives]]]
+            --clusters = maui
+            --partition = nesi_research
+            --account = niwa00001
+            --job-name = test_gcom
+            --mem-per-cpu = 500M
+            --time = 00:10:00
+            --nodes = 1
+            --cpus-per-task = 1
+            --hint = nomultithread
+        [[[environment]]]
+            ROSE_LAUNCHER_ULIMIT_OPTS = -s unlimited
+            # Make sure stdout is available
+            ROSE_LAUNCHER_PREOPTS = --unbuffered
+            OMP_NUM_THREADS = $SLURM_CPUS_PER_TASK
+
+    [[NIWA_XC50_PARALLEL_TASKS_1]]
+        [[[directives]]]
+            --ntasks = 1
+
+    [[NIWA_XC50_PARALLEL_TASKS_32]]
+        [[[directives]]]
+            --ntasks = 32
+
+    [[NIWA_XC50_CRAY]]
+        pre-script = """
+                     module swap NeSI NIWA
+                     module load PrgEnv-cray craype-x86-skylake FCM
+                     module swap PrgEnv-cray PrgEnv-cray/6.0.10
+                     module swap cce cce/15.0.1
+                     module swap FCM FCM/2019.09.0
+                     """
+
+    [[NIWA_XC50_IFORT]]
+        pre-script = """
+                     module swap NeSI NIWA
+                     module load PrgEnv-cray craype-x86-skylake FCM
+                     module swap PrgEnv-cray PrgEnv-intel/6.0.10
+                     module swap intel intel/19.1.3.304
+                     module swap FCM FCM/2019.09.0
+                     """
+
+{% set compilers = ["CRAY", "IFORT"] %}
+
+{% for compiler in compilers %}
+
+    [[NIWA_XC50_MPP_{{ compiler }}]]
+         [[[environment]]]
+            TARGET_MACHINE=niwa_xc50_{{ compiler|lower()}}_mpp
+
+    [[NIWA_XC50_SERIAL_{{ compiler }}]]
+         [[[environment]]]
+            TARGET_MACHINE=niwa_xc50_{{ compiler|lower()}}_serial
+
+    [[NIWA_XC50_SERIAL32B_{{ compiler }}]]
+         [[[environment]]]
+            TARGET_MACHINE=niwa_xc50-32B_{{ compiler|lower()}}_serial
+
+   {# Insert runtime definitions for the parallel library on XC50 #}
+   {{ mpp.runtime_definitions_fcm_make(PLATFORM='xc50_'+compiler|lower(), INHERIT='NIWA_XC50_'+compiler+', NIWA_XC50, NIWA_XC50_MPP_'+compiler) }}
+   {{ mpp.runtime_definitions_run_test(PLATFORM='xc50_'+compiler|lower(), INHERIT='NIWA_XC50_'+compiler+', NIWA_XC50, NIWA_XC50_SL, NIWA_XC50_PARALLEL_TASKS_32') }}
+   {{ mpp.runtime_definitions_rose_ana(PLATFORM='xc50_'+compiler|lower(), INHERIT='NIWA_XC50_'+compiler+', NIWA_XC50') }}
+
+   {# Insert runtime definitions for the serial library on XC50 #}
+   {{ serial.runtime_definitions_fcm_make(PLATFORM='xc50_'+compiler|lower(), INHERIT='NIWA_XC50_'+compiler+', NIWA_XC50, NIWA_XC50_SERIAL_'+compiler) }}
+   {{ serial.runtime_definitions_run_test(PLATFORM='xc50_'+compiler|lower(), INHERIT='NIWA_XC50_'+compiler+', NIWA_XC50, NIWA_XC50_SL, NIWA_XC50_PARALLEL_TASKS_1') }}
+   {{ serial.runtime_definitions_rose_ana(PLATFORM='xc50_'+compiler|lower(), INHERIT='NIWA_XC50_'+compiler+', NIWA_XC50') }}
+
+   {# Insert runtime definitions for the serial 32B library on XC50 #}
+   {{ serial.runtime_definitions_fcm_make(PLATFORM='xc50_'+compiler|lower(), PRECISION='32B', INHERIT='NIWA_XC50_'+compiler+', NIWA_XC50, NIWA_XC50_SERIAL32B_'+compiler) }}
+   {{ serial.runtime_definitions_run_test(PLATFORM='xc50_'+compiler|lower(), PRECISION='32B', INHERIT='NIWA_XC50_'+compiler+', NIWA_XC50, NIWA_XC50_SL, NIWA_XC50_PARALLEL_TASKS_1') }}
+   {{ serial.runtime_definitions_rose_ana(PLATFORM='xc50_'+compiler|lower(), PRECISION='32B', INHERIT='NIWA_XC50_'+compiler+', NIWA_XC50') }}
+
+{% endfor %}
+
+# -------------------------------------------------------------
+# Platform configurations - CS500
+# -------------------------------------------------------------
+
+    [[NIWA_CS500]]
+        [[[remote]]]
+            host = {{HOST_CS500}}
+
+    [[NIWA_CS500_SL]]
+        [[[job]]]
+            batch system = slurm
+        [[[directives]]]
+            --clusters = maui_ancil
+            --partition = nesi_prepost
+            --account = niwa00001
+            --job-name = test_gcom
+            --mem-per-cpu = 500M
+            --time = 00:10:00
+            --nodes = 1
+            --cpus-per-task = 1
+            --hint = nomultithread
+        [[[environment]]]
+            ROSE_LAUNCHER_ULIMIT_OPTS = -s unlimited
+            # Make sure stdout is available
+            ROSE_LAUNCHER_PREOPTS = --unbuffered
+            OMP_NUM_THREADS = $SLURM_CPUS_PER_TASK
+
+    [[NIWA_CS500_PARALLEL_TASKS_1]]
+        [[[directives]]]
+            --ntasks = 1
+
+    [[NIWA_CS500_PARALLEL_TASKS_2]]
+        [[[directives]]]
+            --ntasks = 2
+
+    [[NIWA_CS500_GFORTRAN]]
+        pre-script = """
+                     module purge
+                     module load NIWA
+                     module load FCM/2019.09.0-GCC-9.2.0
+                     module load gimpi/2020a
+                     """
+
+    [[NIWA_CS500_IFORT]]
+        pre-script = """
+                     module purge
+                     module load NIWA
+                     module load FCM/2019.09.0-GCC-9.2.0
+                     module load iimpi/2020a
+                     """
+
+{% set compilers = ["GFORTRAN", "IFORT"] %}
+
+{% for compiler in compilers %}
+
+    [[NIWA_CS500_MPP_{{ compiler }}]]
+         [[[environment]]]
+            TARGET_MACHINE=niwa_cs500_{{ compiler|lower()}}_impi
+
+    [[NIWA_CS500_SERIAL_{{ compiler }}]]
+         [[[environment]]]
+            TARGET_MACHINE=niwa_cs500_{{ compiler|lower()}}_serial
+
+    [[NIWA_CS500_SERIAL32B_{{ compiler }}]]
+         [[[environment]]]
+            TARGET_MACHINE=niwa_cs500-32B_{{ compiler|lower()}}_serial
+
+   {# Insert runtime definitions for the parallel library on CS500 #}
+   {{ mpp.runtime_definitions_fcm_make(PLATFORM='cs500_'+compiler|lower(), INHERIT='NIWA_CS500_'+compiler+', NIWA_CS500, NIWA_CS500_MPP_'+compiler) }}
+   {{ mpp.runtime_definitions_run_test(PLATFORM='cs500_'+compiler|lower(), INHERIT='NIWA_CS500_'+compiler+', NIWA_CS500, NIWA_CS500_SL, NIWA_CS500_PARALLEL_TASKS_2') }}
+   {{ mpp.runtime_definitions_rose_ana(PLATFORM='cs500_'+compiler|lower(), INHERIT='NIWA_CS500_'+compiler+', NIWA_CS500') }}
+
+   {# Insert runtime definitions for the serial library on CS500 #}
+   {{ serial.runtime_definitions_fcm_make(PLATFORM='cs500_'+compiler|lower(), INHERIT='NIWA_CS500_'+compiler+', NIWA_CS500, NIWA_CS500_SERIAL_'+compiler) }}
+   {{ serial.runtime_definitions_run_test(PLATFORM='cs500_'+compiler|lower(), INHERIT='NIWA_CS500_'+compiler+', NIWA_CS500, NIWA_CS500_SL, NIWA_CS500_PARALLEL_TASKS_1') }}
+   {{ serial.runtime_definitions_rose_ana(PLATFORM='cs500_'+compiler|lower(), INHERIT='NIWA_CS500_'+compiler+', NIWA_CS500') }}
+
+   {# Insert runtime definitions for the serial 32B library on CS500 #}
+   {{ serial.runtime_definitions_fcm_make(PLATFORM='cs500_'+compiler|lower(), PRECISION='32B', INHERIT='NIWA_CS500_'+compiler+', NIWA_CS500, NIWA_CS500_SERIAL32B_'+compiler) }}
+   {{ serial.runtime_definitions_run_test(PLATFORM='cs500_'+compiler|lower(), PRECISION='32B', INHERIT='NIWA_CS500_'+compiler+', NIWA_CS500, NIWA_CS500_SL, NIWA_CS500_PARALLEL_TASKS_1') }}
+   {{ serial.runtime_definitions_rose_ana(PLATFORM='cs500_'+compiler|lower(), PRECISION='32B', INHERIT='NIWA_CS500_'+compiler+', NIWA_CS500') }}
+
+{% endfor %}
+
+    [[NIWA_APPTAINER]]
+        [[[remote]]]
+            host = {{HOST_APPTAINER}}
+
+
+    [[NIWA_APPTAINER_SL]]
+        [[[job]]]
+            batch system = slurm
+        [[[directives]]]
+            --clusters = maui_ancil
+            --partition = nesi_prepost
+            --account = niwa99999
+            --job-name = test_gcom
+            --mem-per-cpu = 500M
+            --time = 00:30:00
+            --nodes = 1
+            --cpus-per-task = 1
+            --hint = nomultithread
+        [[[environment]]]
+            ROSE_LAUNCHER_ULIMIT_OPTS = -s unlimited
+            # Make sure stdout is available
+            ROSE_LAUNCHER_PREOPTS = --unbuffered
+            OMP_NUM_THREADS = $SLURM_CPUS_PER_TASK
+
+    [[NIWA_APPTAINER_PARALLEL_TASKS_1]]
+        [[[directives]]]
+            --ntasks = 1
+
+    [[NIWA_APPTAINER_PARALLEL_TASKS_2]]
+        [[[directives]]]
+            --ntasks = 2
+
+    [[NIWA_APPTAINER_IFORT]]
+        pre-script = """
+                     module purge
+                     module load NIWA
+                     module load FCM/2019.09.0-GCC-9.2.0
+                     module load Singularity/3.9.4
+                     module load iimpi/2020a
+                     """
+
+    [[NIWA_APPTAINER_MPP_IFORT]]
+         [[[environment]]]
+            TARGET_MACHINE=niwa_apptainer_ifort_impi
+
+    [[NIWA_APPTAINER_SERIAL_IFORT]]
+         [[[environment]]]
+            TARGET_MACHINE=niwa_apptainer_ifort_serial
+
+    [[NIWA_APPTAINER_SERIAL32B_IFORT]]
+         [[[environment]]]
+            TARGET_MACHINE=niwa_apptainer-32B_ifort_serial
+
+   {# Insert runtime definitions for the parallel library on APPTAINER #}
+   {{ mpp.runtime_definitions_fcm_make(PLATFORM='apptainer_ifort', INHERIT='NIWA_APPTAINER_IFORT'+', NIWA_APPTAINER, NIWA_APPTAINER_MPP_IFORT') }}
+   {{ mpp.runtime_definitions_run_test(PLATFORM='apptainer_ifort', INHERIT='NIWA_APPTAINER_IFORT'+', NIWA_APPTAINER, NIWA_APPTAINER_SL, NIWA_APPTAINER_PARALLEL_TASKS_2') }}
+   {{ mpp.runtime_definitions_rose_ana(PLATFORM='apptainer_ifort', INHERIT='NIWA_APPTAINER_IFORT'+', NIWA_APPTAINER') }}
+
+   {# Insert runtime definitions for the serial library on APPTAINER #}
+   {{ serial.runtime_definitions_fcm_make(PLATFORM='apptainer_ifort', INHERIT='NIWA_APPTAINER_IFORT'+', NIWA_APPTAINER, NIWA_APPTAINER_SERIAL_IFORT') }}
+   {{ serial.runtime_definitions_run_test(PLATFORM='apptainer_ifort', INHERIT='NIWA_APPTAINER_IFORT'+', NIWA_APPTAINER, NIWA_APPTAINER_SL, NIWA_APPTAINER_PARALLEL_TASKS_1') }}
+   {{ serial.runtime_definitions_rose_ana(PLATFORM='apptainer_ifort', INHERIT='NIWA_APPTAINER_IFORT'+', NIWA_APPTAINER') }}
+
+   {# Insert runtime definitions for the serial 32B library on APPTAINER #}
+   {{ serial.runtime_definitions_fcm_make(PLATFORM='apptainer_ifort', PRECISION='32B', INHERIT='NIWA_APPTAINER_IFORT'+', NIWA_APPTAINER, NIWA_APPTAINER_SERIAL32B_IFORT') }}
+   {{ serial.runtime_definitions_run_test(PLATFORM='apptainer_ifort', PRECISION='32B', INHERIT='NIWA_APPTAINER_IFORT'+', NIWA_APPTAINER, NIWA_APPTAINER_SL, NIWA_APPTAINER_PARALLEL_TASKS_1') }}
+   {{ serial.runtime_definitions_rose_ana(PLATFORM='apptainer_ifort', PRECISION='32B', INHERIT='NIWA_APPTAINER_IFORT'+', NIWA_APPTAINER') }}
+
