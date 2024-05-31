@@ -332,10 +332,11 @@ export DATE=$(date)
     [[NIWA_APPTAINER_IFORT]]
         pre-script = """
                      module purge
-                     module load NIWA
+                     module load NeSI
                      module load FCM/2019.09.0-GCC-9.2.0
                      module load Singularity/3.9.4
-                     module load iimpi/2020a
+                     module list
+                     echo "now in $PWD"
                      """
 
     [[NIWA_APPTAINER_MPP_IFORT]]
