@@ -229,6 +229,8 @@ in the gcom directory.
 
 Note: you must be member of the `niwa00001` project. 
 
+CHECK THAT IT IS POSSIBLE TO USE ANOTHER PROJECT NUMBER. WILL REQUIRE TO CHANGE --account in `packages/gcom/rose-stem/site/niwa/suite.rc`.
+
 
 
 
