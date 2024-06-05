@@ -196,5 +196,33 @@ You may need to enter your password twice. Check that your password has been cac
 Apptainer> rosie hello
 ```
 
+## Building GCOM
+
+GCOM is the communication library required by UM to build. At the moment of writing, GCOM requires FCM, Cylc 7 and Rose 1 to build . We recommend to use Cylc 7.9.9 on `w-clim01.maui.niwa.co.nz` to compile GCOM. 
+
+### Getting GCOM
+
+Start by checking out the code
+```
+fcm co file:///opt/niwa/um_sys/metoffice-science-repos/gcom/main/trunk gcom
+cd gcom
+```
+
+### Configuring GCOM
+
+Next, you'll need to copy the files in `<this_repo>/packages/gcom/rose-stem/site/niwa/suite.rc` to `rose-stem/site/niwa/` and `<this_repo>/packages/gcom/fc-make/machines/niwa_apptainer*.cfg` to `fc-make/machines/` under the `gcom` repo, respectively. You will need to edit the files `<this_repo>/packages/gcom/fc-make/machines/niwa_apptainer*.cfg` as these refer to the location of the `nzesmenv.sif` file. You may also have to change the bindings of the apptainer/singularity command if compiling on another platform. 
+
+### Compilinging GCOM
+
+Type
+```
+rose stem -v -v -v --group=apptainer_build
+rose stem -v -v -v --group=apptainer_test
+```
+in the gcom directory.
+
+
+
+
 
 
