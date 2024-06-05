@@ -216,12 +216,18 @@ Note: the provided configuration files use the older `singularity` command in pl
 
 ### Compiling GCOM
 
-Type
+On `w-clim01.maui.niwa.co.nz` type
 ```
+module purge
+module load NIWA FCM Singularity
+export CYLC_VERSION=7.9.9
+export PROJECT=niwa00001
 rose stem -v -v -v --group=apptainer_build
 rose stem -v -v -v --group=apptainer_test
 ```
 in the gcom directory.
+
+Note: you must be member of the `niwa00001` project. 
 
 
 
