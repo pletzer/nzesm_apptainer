@@ -210,9 +210,11 @@ cd gcom
 
 ### Configuring GCOM
 
-Next, you'll need to copy the files in `<this_repo>/packages/gcom/rose-stem/site/niwa/suite.rc` to `rose-stem/site/niwa/` and `<this_repo>/packages/gcom/fc-make/machines/niwa_apptainer*.cfg` to `fc-make/machines/` under the `gcom` repo, respectively. You will need to edit the files `<this_repo>/packages/gcom/fc-make/machines/niwa_apptainer*.cfg` as these refer to the location of the `nzesmenv.sif` file. You may also have to change the bindings of the apptainer/singularity command if compiling on another platform. 
+Next, you'll need to copy the files in `<this_repo>/packages/gcom/rose-stem/site/niwa/suite.rc` to `rose-stem/site/niwa/` and `<this_repo>/packages/gcom/fc-make/machines/niwa_apptainer*.cfg` to `fc-make/machines/` under the `gcom` repo, respectively. You will need to edit the files `<this_repo>/packages/gcom/fc-make/machines/niwa_apptainer*.cfg` as these refer to the location of the `nzesmenv.sif` file. You may also have to change the bindings of the apptainer/singularity command if compiling on another platform.
 
-### Compilinging GCOM
+Note: the provided configuration files use the older `singularity` command in place of `apptainer`. The `singularity` command also works in apptainer. 
+
+### Compiling GCOM
 
 Type
 ```
