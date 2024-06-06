@@ -6,11 +6,15 @@ Definition files for creating an NZESM Apptainer environment
 Containerisation allows you to compile code that can be easily ported from one platform to another (with some restrictions). As the name suggests, all the dependencies are contained -- there are no undefined references.
 
 The container `nzesmenv` described below comes with an operating system, compilers, and libraries, including MPI. It can be thought as a replacement for the 
-modules used on many high performance computers to load in dependencies (toolchain, NetCDF, etc). 
+modules used on many high performance computers to load in dependencies (toolchain, NetCDF, etc).
 
-## How to build a container
+## Prerequisites
 
 First you need to have Apptainer installed. If you're running Linux, you're in luck, just follow these [instructions](https://apptainer.org/docs/user/latest/). On Windows, you can use Windows Linux Subsystem (WSL) and on Mac you might have to install Apptainer within a Docker environment. 
+
+To build the `nzesmenv.sif` container you'll need to compile the `GCOM` library. To build GCOM you'll need Cylc7, Rose 1 and FCM. It's hard to build GCOM inside the container so we have provided instructions below how to build the library outside the container using the container's compilers and MPI. For convenience, we include the commands to copy the library and Fortran module files in the `%files` section of `conf/nzesmenv.def`.  Edit section `%files` to reflect the location of the libraries and module files.
+
+## How to build a container
 
 A container needs a definition file, e.g. `conf/nzesmenv.def`. This file lists the operating system, the compilers and the steps to build the libraries. It is a recipe for building the container.
 

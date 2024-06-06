@@ -33,7 +33,68 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     # silent installation of perl modules, uses defaults
     export PERL_MM_USE_DEFAULT=1
 
+%setup
+    #create directory structure to receive the libraries, tools
+    mkdir -p $APPTAINER_ROOTFS/software/gcom/impi/lib
+    mkdir -p $APPTAINER_ROOTFS/software/gcom/impi/include
+    mkdir -p $APPTAINER_ROOTFS/software/gcom/serial/lib
+    mkdir -p $APPTAINER_ROOTFS/software/gcom/serial/include
+    mkdir -p $APPTAINER_ROOTFS/software/gcom/serial-32B/lib
+    mkdir -p $APPTAINER_ROOTFS/software/gcom/serial-32B/include
+
+%files
+    # copying GCOM precompiled library and headers....
+
+    # src dst
+    # MAY NEED TO CHANGE IF SOMEONE ELSE IS RUNNING
+
+    # impi
+    /home/pletzera/gcom/impi/lib/libgcom.a /software/gcom/impi/lib
+    /home/pletzera/gcom/impi/lib/libo.a /software/gcom/impi/lib
+    /home/pletzera/gcom/impi/include/gc__buildconst.mod /software/gcom/impi/include
+    /home/pletzera/gcom/impi/include/gc_constants_mod.mod /software/gcom/impi/include
+    /home/pletzera/gcom/impi/include/gc_globals_mod.mod /software/gcom/impi/include
+    /home/pletzera/gcom/impi/include/gc_kinds_mod.mod /software/gcom/impi/include
+    /home/pletzera/gcom/impi/include/gc_me_mod.mod /software/gcom/impi/include
+    /home/pletzera/gcom/impi/include/gc_nproc_mod.mod /software/gcom/impi/include
+    /home/pletzera/gcom/impi/include/gcg_me_mod.mod /software/gcom/impi/include
+    /home/pletzera/gcom/impi/include/gcom_mod.mod /software/gcom/impi/include
+    /home/pletzera/gcom/impi/include/mpl.mod /software/gcom/impi/include
+
+    # serial
+    /home/pletzera/gcom/serial/lib/libgcom.a /software/gcom/serial/lib
+    /home/pletzera/gcom/serial/lib/libo.a /software/gcom/serial/lib
+    /home/pletzera/gcom/serial/include/gc__buildconst.mod /software/gcom/serial/include
+    /home/pletzera/gcom/serial/include/gc_constants_mod.mod /software/gcom/serial/include
+    /home/pletzera/gcom/serial/include/gc_globals_mod.mod /software/gcom/serial/include
+    /home/pletzera/gcom/serial/include/gc_kinds_mod.mod /software/gcom/serial/include
+    /home/pletzera/gcom/serial/include/gc_me_mod.mod /software/gcom/serial/include
+    /home/pletzera/gcom/serial/include/gc_nproc_mod.mod /software/gcom/serial/include
+    /home/pletzera/gcom/serial/include/gcg_me_mod.mod /software/gcom/serial/include
+    /home/pletzera/gcom/serial/include/gcom_mod.mod /software/gcom/serial/include
+    /home/pletzera/gcom/serial/include/mpl.mod /software/gcom/serial/include
+
+    # serial-32B
+    /home/pletzera/gcom/serial-32B/lib/libgcom.a /software/gcom/serial-32B/lib
+    /home/pletzera/gcom/serial-32B/lib/libo.a /software/gcom/serial-32B/lib
+    /home/pletzera/gcom/serial-32B/include/gc__buildconst.mod /software/gcom/serial-32B/include
+    /home/pletzera/gcom/serial-32B/include/gc_constants_mod.mod /software/gcom/serial-32B/include
+    /home/pletzera/gcom/serial-32B/include/gc_globals_mod.mod /software/gcom/serial-32B/include
+    /home/pletzera/gcom/serial-32B/include/gc_kinds_mod.mod /software/gcom/serial-32B/include
+    /home/pletzera/gcom/serial-32B/include/gc_me_mod.mod /software/gcom/serial-32B/include
+    /home/pletzera/gcom/serial-32B/include/gc_nproc_mod.mod /software/gcom/serial-32B/include
+    /home/pletzera/gcom/serial-32B/include/gcg_me_mod.mod /software/gcom/serial-32B/include
+    /home/pletzera/gcom/serial-32B/include/gcom_mod.mod /software/gcom/serial-32B/include
+    /home/pletzera/gcom/serial-32B/include/mpl.mod /software/gcom/serial-32B/include
+
+
 %post
+
+    export DEPS_DIR=/software
+
+    mkdir -p $DEPS_DIR
+    mkdir -p ${DEPS_DIR}/bin
+
     apt -y update
     apt -y install wget
     apt -y install tcsh
@@ -94,8 +155,6 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     OASIS_MCT_VERSION="5.1"
     XIOS_VERSION="2024-05-21"
 
-    export DEPS_DIR=/software
-
     # compilers
     # cannot yet use icx and icpx
     export CC=icc
@@ -112,9 +171,6 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     export PNETCDF=$DEPS_DIR
 
     export LD_LIBRARY_PATH="$DEPS_DIR/lib:$LD_LIBRARY_PATH"
-
-    mkdir -p $DEPS_DIR
-    mkdir -p ${DEPS_DIR}/bin
 
     # FCM
     cd $DEPS_DIR
@@ -324,6 +380,6 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.path
     cd ..
     ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct --job 4
-    
+        
 
 
