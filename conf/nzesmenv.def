@@ -119,6 +119,8 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     # cylc
     apt -y install python3-dev
     apt -y install python3-pip
+    # required by rose
+    apt -y install python2.7 
     apt -y install npm
     apt -y install nodejs
     apt -y install python3-graphviz
@@ -126,12 +128,23 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     # apr is causing some issues with perl -MCPAN -e 'install SVN::Client'
     #apt -y install libapr1-dev libaprutil1-dev
 
+
+    # Make Python3 the default Python, required by pFUnit and LFRic build systems
+    # Note that this may break Python3-incompatible scripts
+    update-alternatives --install /usr/local/bin/python python /usr/bin/python3 10
+    update-alternatives --config python
+
+    # Rose requires Python 2
+    update-alternatives --install /usr/local/bin/python2 python2 /usr/bin/python2.7 10
+    update-alternatives --config python2
+
     apt -y install perl-modules-5.34
     apt -y install perl-tk
     apt -y install xxdiff
     apt -y install rsync
     apt -y install diffutils
     apt -y install libsvn-perl
+
     # perl modules, required by FCM
     # https://metomi.github.io/fcm/doc/installation/
     perl -MCPAN -e 'install Config::IniFiles'
