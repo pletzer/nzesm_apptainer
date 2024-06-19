@@ -14,7 +14,6 @@ From: ubuntu:22.04
     # set some environment variables
     export USER="root"
 
-
     # update the package info on the system
     apt -y update
     # upgrade the packages on the system
