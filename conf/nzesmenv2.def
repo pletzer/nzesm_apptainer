@@ -8,9 +8,9 @@ From: intel/oneapi-hpckit:devel-ubuntu18.04
 
     apt-get update && apt-get upgrade -y
   
-    apt -y install wget file vim
+    apt-get install -y wget file vim
 
-    # Set timezone to UTC non-interactively
+    echo "> Setting timezone to UTC non-interactively..."
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime
     apt-get install -y tzdata
     dpkg-reconfigure --frontend noninteractive tzdata
