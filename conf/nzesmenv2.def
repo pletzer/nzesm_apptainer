@@ -15,7 +15,7 @@ From: intel/oneapi-hpckit:devel-ubuntu18.04
     apt-get install -y tzdata
     dpkg-reconfigure --frontend noninteractive tzdata
 
-    # Pretend we build a vargrant VM
+    # Pretend we build a vagrant VM
     git clone https://github.com/pletzer/metomi-vms.git /vagrant
 
     cd /vagrant
@@ -24,7 +24,7 @@ From: intel/oneapi-hpckit:devel-ubuntu18.04
 
     echo "> Install UM dependencies"
     for version in 10.7; do
-      bash -x /usr/local/bin/install-um-extras --output-dir "/usr/local/um${version}" --version ${version}
+      bash -x /usr/local/bin/install-um-extras --output_dir "/usr/local/um${version}" --version ${version}
     done
 
     # manual installation of mosrs
