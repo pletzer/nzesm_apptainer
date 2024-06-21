@@ -23,9 +23,8 @@ From: intel/oneapi-hpckit:devel-ubuntu18.04
     bash -x install.sh ubuntu 1804
 
     echo "> Install UM dependencies"
-    for version in 10.7; do
-      bash -x /usr/local/bin/install-um-extras --output_dir "/usr/local/um${version}" --version ${version}
-    done
+    version="10.7"
+    bash -x /usr/local/bin/install-um-extras -v ${version}
 
     # manual installation of mosrs
 
