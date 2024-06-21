@@ -17,12 +17,19 @@ From: intel/oneapi-hpckit:devel-ubuntu18.04
 
     # Pretend we build a vargrant VM
     git clone https://github.com/pletzer/metomi-vms.git /vagrant
-    cd /vagrant
 
+    cd /vagrant
     echo "> Build base...."
     bash -x install.sh ubuntu 1804
 
+    echo "> Install UM dependencies"
+    for version in 10.7; do
+      bash -x /usr/local/bin/install-um-extras --output-dir "/usr/local/um${version}" --version ${version}
+    done
+
     # manual installation of mosrs
+
+
 
 
     
