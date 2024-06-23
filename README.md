@@ -154,47 +154,12 @@ sbatch myapp.sl
 
 Container `umenv_ubuntu1804.sif` comes with fcm, cylc and rose installed. To access the remote Met Office repos in password-less fashion, you will need to have an account on [MOSRS](https://code.metoffice.gov.uk/trac/home). Rose tasks may require you to have your password cached. To cache your password when using `rose` in the container, do
 ```bash
-Apptainer> source /software/rose/bin/mosrs-setup-gpg-agent
+Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
 ```
 You may need to enter your password twice. Check that your password has been cached with
 ```bash
 Apptainer> rosie hello
 ```
-
-## Building GCOM
-
-GCOM is the communication library required by UM to build. At the moment of writing, GCOM requires FCM, Cylc 7 and Rose 1 to build . We recommend to use Cylc 7.9.9 on `w-clim01.maui.niwa.co.nz` to compile GCOM. 
-
-### Getting GCOM
-
-Start by checking out the code
-```
-fcm co file:///opt/niwa/um_sys/metoffice-science-repos/gcom/main/trunk gcom
-cd gcom
-```
-
-### Configuring GCOM
-
-Next, you'll need to copy the files in `<this_repo>/packages/gcom/rose-stem/site/niwa/suite.rc` to `rose-stem/site/niwa/` and `<this_repo>/packages/gcom/fc-make/machines/niwa_apptainer*.cfg` to `fc-make/machines/` under the `gcom` repo, respectively. You will need to edit the files `<this_repo>/packages/gcom/fc-make/machines/niwa_apptainer*.cfg` as these refer to the location of the `umenv_ubuntu1804.sif` file. You may also have to change the bindings of the apptainer/singularity command if compiling on another platform.
-
-Note: the provided configuration files use the older `singularity` command in place of `apptainer`. The `singularity` command also works in apptainer. 
-
-### Compiling GCOM
-
-On `w-clim01.maui.niwa.co.nz` type
-```
-module purge
-module load NIWA FCM Singularity
-export CYLC_VERSION=7.9.9
-export PROJECT=niwa00001
-rose stem -v -v -v --group=apptainer_build
-rose stem -v -v -v --group=apptainer_test
-```
-in the gcom directory.
-
-Note: you must be member of the `niwa00001` project. 
-
-CHECK THAT IT IS POSSIBLE TO USE ANOTHER PROJECT NUMBER. WILL REQUIRE TO CHANGE --account in `packages/gcom/rose-stem/site/niwa/suite.rc`.
 
 
 
