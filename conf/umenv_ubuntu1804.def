@@ -1,0 +1,37 @@
+BootStrap: docker
+From: intel/oneapi-hpckit:devel-ubuntu18.04
+
+# %environment
+#     export PATH=$HOME/bin:$PATH
+
+%post
+
+    apt-get update && apt-get upgrade -y
+  
+    apt-get install -y wget file vim gpg-agent gpg
+
+    echo "> Setting timezone to UTC non-interactively..."
+    ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+    apt-get install -y tzdata
+    dpkg-reconfigure --frontend noninteractive tzdata
+
+    # Pretend we build a vagrant VM
+    git clone https://github.com/pletzer/metomi-vms.git /vagrant
+
+    cd /vagrant
+    echo "> Build base...."
+    bash -x install.sh ubuntu 1804 mosrs
+
+    echo "> Install UM dependencies"
+    version="10.7"
+    bash -x /usr/local/bin/install-um-extras -v ${version}
+
+    # manual installation of mosrs
+
+
+
+
+    
+        
+
+
