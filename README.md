@@ -76,8 +76,8 @@ The Unified Model (UM) has additional dependencies, which need to be built as a 
 
 1. Copy the `umenv_ubuntu1804.sif` file to the the target platform (e.g. Mahuika)
 2. `module load Apptainer`
-3. `apptainer shell -B/scale_wlg_nobackup/filesets/nobackup,/nesi/nobackup,/home/$USER umenv_ubuntu1804.sif`
-5. Inside the Apptainer shell type `um-setup`
+3. `apptainer shell umenv_ubuntu1804.sif`
+5. Inside the Apptainer shell type `um-setup`. You will need to enter your password to conenct to the metoffice repos.
 
 
 
