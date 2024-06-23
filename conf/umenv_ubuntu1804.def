@@ -1,14 +1,14 @@
 BootStrap: docker
 From: intel/oneapi-hpckit:devel-ubuntu18.04
 
-%environment
-    export PATH=$HOME/bin:$PATH
+# %environment
+#     export PATH=$HOME/bin:$PATH
 
 %post
 
     apt-get update && apt-get upgrade -y
   
-    apt-get install -y wget file vim
+    apt-get install -y wget file vim gpg-agent gpg
 
     echo "> Setting timezone to UTC non-interactively..."
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime
@@ -20,7 +20,7 @@ From: intel/oneapi-hpckit:devel-ubuntu18.04
 
     cd /vagrant
     echo "> Build base...."
-    bash -x install.sh ubuntu 1804
+    bash -x install.sh ubuntu 1804 mosrs
 
     echo "> Install UM dependencies"
     version="10.7"
