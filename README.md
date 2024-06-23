@@ -150,17 +150,6 @@ EOF
 sbatch myapp.sl
 ```
 
-## Caching your password when using rose
-
-Container `umenv_ubuntu1804.sif` comes with fcm, cylc and rose installed. To access the remote Met Office repos in password-less fashion, you will need to have an account on [MOSRS](https://code.metoffice.gov.uk/trac/home). Rose tasks may require you to have your password cached. To cache your password when using `rose` in the container, do
-```bash
-Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
-```
-You may need to enter your password twice. Check that your password has been cached with
-```bash
-Apptainer> rosie hello
-```
-
 
 
 
