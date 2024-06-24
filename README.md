@@ -22,7 +22,7 @@ apptainer build umenv_ubuntu1804.sif conf/umenv_ubuntu1804.def
 ```
 or, on a local laptop if you encounter the error `FATAL: ...permission denied`,
 ```
-sudo -E apptainer build umenv_ubuntu1804.sif conf/umenv_ubuntu1804.def
+sudo -E apptainer build --force umenv_ubuntu1804.sif conf/umenv_ubuntu1804.def
 ```
 Now take a cup of coffee.
 
