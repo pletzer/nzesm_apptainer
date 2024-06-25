@@ -70,6 +70,32 @@ Apptainer>
 ```
 In this environment, you should also have the commands `fcm`, `rose` and `cylc` available.
 
+Note that some applications will want to write to some directories inside the container. For instance, `cylc` may write to `/var`. To allow this we need to create an overlay directory, here of size 1GB,
+```
+apptainer overlay create --size 1024  --create-dir /var /tmp/var.img
+```
+Then
+```
+apptainer shell --overlay /tmp/var.img umenv_ubuntu1804.sif
+```
+Inside the container you can create files, e.g.
+```
+Apptainer> touch /var/foo.txt
+```
+TO CHECK...
+
+## Caching your password
+
+Assuming that you have been given access to `https://code.metoffice.gov.uk`, you can cache your password using
+```
+Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
+```
+Check that your password has been cached with the command
+```
+Apptainer> rosie hello
+https://code.metoffice.gov.uk/rosie/u/hello: Hello alexanderpletzer
+```
+
 ## Building GCOM and shum
 
 The Unified Model (UM) has additional dependencies, which need to be built as a second step. You will need access to the `code.metoffice.gov.uk` repository.
@@ -77,9 +103,16 @@ The Unified Model (UM) has additional dependencies, which need to be built as a 
 1. Copy the `umenv_ubuntu1804.sif` file to the the target platform (e.g. Mahuika)
 2. `module load Apptainer`
 3. `apptainer shell umenv_ubuntu1804.sif`
-5. Inside the Apptainer shell type `um-setup`. You will need to enter your password to conenct to the metoffice repos.
+5. Inside the Apptainer shell type `um-setup`
 
+## Building and running the atmosphere
 
+Check out the suite, compile and run it
+```
+Apptainer> rosie checkout u-af836
+Apptainer> cd ~/roses/u-af836
+Apptainer> rose suite-run
+```
 
 ## How to compile an application using the containerised environment
 
