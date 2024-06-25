@@ -8,7 +8,7 @@ From: intel/oneapi-hpckit:devel-ubuntu18.04
 
     apt-get update && apt-get upgrade -y
   
-    apt-get install -y wget file vim gpg-agent gpg
+    apt-get install -y wget file vim 
 
     echo "> Setting timezone to UTC non-interactively..."
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime
@@ -22,12 +22,9 @@ From: intel/oneapi-hpckit:devel-ubuntu18.04
     echo "> Build base...."
     bash -x install.sh ubuntu 1804 mosrs
 
-    echo "> Install UM dependencies"
+    echo "> Install UM dependencies (netcdf, grib/eccode, ...)"
     version="10.7"
     bash -x /usr/local/bin/install-um-extras -v ${version}
-
-    # manual installation of mosrs
-
 
 
 
