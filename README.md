@@ -70,20 +70,6 @@ Apptainer>
 ```
 In this environment, you should also have the commands `fcm`, `rose` and `cylc` available.
 
-Note that some applications will want to write to some directories inside the container. For instance, `cylc` may write to `/var`. To allow this we need to create an overlay directory, here of size 1GB,
-```
-apptainer overlay create --size 1024  --create-dir /var /tmp/var.img
-```
-Then
-```
-apptainer shell --overlay /tmp/var.img umenv_ubuntu1804.sif
-```
-Inside the container you can create files, e.g.
-```
-Apptainer> touch /var/foo.txt
-```
-TO CHECK...
-
 ## Caching your password
 
 Assuming that you have been given access to `https://code.metoffice.gov.uk`, you can cache your password using
@@ -95,6 +81,13 @@ Check that your password has been cached with the command
 Apptainer> rosie hello
 https://code.metoffice.gov.uk/rosie/u/hello: Hello alexanderpletzer
 ```
+
+## Turning on some services
+
+Some applications want to modify some directories inside the container. For instance, `cylc` may call the `at` tool to submit a task. To allow this, you need to:
+  1. Invoke `apptainer shell --fakeroot --writable-tmpfs umenv_ubuntu1804.sif` with the additional `--fakeroot --writable-tmpfs` options. Option `--writable-tmpfs` allows `at` to write to `/var`. The changes are temporary, however. You don't need to worry about making permanent changes to your container. `--fakeroot` is required because some commands should be executed by root.
+  2. Start the `atd` daemon inside the container, i.e. `service atd start`
+
 
 ## Building GCOM and shum
 
