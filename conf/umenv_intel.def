@@ -1,14 +1,14 @@
 BootStrap: docker
-From: intel/oneapi-hpckit:devel-ubuntu22.04
+From: intel/oneapi-hpckit:devel-ubuntu20.04
 
 %labels
     Author alexander.pletzer@nesi.org.nz
-    Version 0.0.2
+    Version 0.0.1
 
 %help
     Build a portable environment for the Unified Model
 
-%startscript
+#%startscript
     # start the atd d
     # service atd start
 
@@ -19,7 +19,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
 
     apt-get update && apt-get upgrade -y
   
-    # psmisc has killall, required by mosrs-setup-gpg-agent
+    # mosrs needs the killall command, available via pcmisc
     apt-get install -y wget file vim psmisc
 
     echo "> Setting timezone to UTC non-interactively..."
@@ -32,12 +32,12 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
 
     cd /vagrant
     echo "> Build base...."
-    bash -x install.sh ubuntu 2204 mosrs
+    bash -x install.sh ubuntu 2004 mosrs
 
+    cd /vagrant
     echo "> Install UM dependencies (netcdf, grib/eccode, ...)"
-    version="13.0"
-    bash -x /usr/local/bin/install-um-extras -v ${version}
-    
-        
+    version="10.7"
+    bash -x usr/local/bin/install-um-extras-intel -v ${version}
+
 
 

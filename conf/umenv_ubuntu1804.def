@@ -1,6 +1,17 @@
 BootStrap: docker
 From: intel/oneapi-hpckit:devel-ubuntu18.04
 
+%labels
+    Author alexander.pletzer@nesi.org.nz
+    Version 0.0.2
+
+%help
+    Build a portable environment for the Unified Model
+
+%startscript
+    # start the atd d
+    # service atd start
+
 # %environment
 #     export PATH=$HOME/bin:$PATH
 
@@ -8,7 +19,7 @@ From: intel/oneapi-hpckit:devel-ubuntu18.04
 
     apt-get update && apt-get upgrade -y
   
-    apt-get install -y wget file vim 
+    apt-get install -y wget file vim psmisc
 
     echo "> Setting timezone to UTC non-interactively..."
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime
@@ -26,7 +37,24 @@ From: intel/oneapi-hpckit:devel-ubuntu18.04
     version="10.7"
     bash -x /usr/local/bin/install-um-extras -v ${version}
 
+    echo "Install pnetcdf"
 
+    echo "Install XIOS"
+    apt-get install -yq  libhdf5-mpich-dev
+    xios_revision=1866
+    ln -s /usr/bin/make /usr/bin/gmake
+    cd /usr/src
+    svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@${xios_revision} XIOS
+    cd XIOS
+    echo "export HDF5_INC_DIR=/usr/include/hdf5/mpich" > arch/arch-GCC_LINUX.env
+    echo "export HDF5_LIB_DIR=/usr/lib/x86_64-linux-gnu/hdf5/mpich" >> arch/arch-GCC_LINUX.env
+    echo "export NETCDF_INC_DIR=/usr/include" >> arch/arch-GCC_LINUX.env
+    echo "export NETCDF_LIB_DIR=/usr/local/lib/x86_64-linux-gnu" >> arch/arch-GCC_LINUX.env
+    ./make_xios --full --arch GCC_LINUX --job 4
+    cp lib/libxios.a /usr/lib
+    cp inc/* /usr/include
+    cd ..
+    rm -r XIOS
 
     
         
