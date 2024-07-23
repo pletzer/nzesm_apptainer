@@ -12,8 +12,8 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     # start the atd d
     # service atd start
 
-# %environment
-#     export PATH=$HOME/bin:$PATH
+%environment
+    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 %post
 
