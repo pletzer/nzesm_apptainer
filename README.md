@@ -82,6 +82,13 @@ Apptainer> rosie hello
 https://code.metoffice.gov.uk/rosie/u/hello: Hello alexanderpletzer
 ```
 
+## Other setup files
+
+You will likely need to set up and edit the following files:
+ 1. ~/.metomi/rese.conf
+ 2. ~/.subversion/servers
+Please refer to the Metoffice documentation on how to set these files up.
+
 ## Building GCOM
 
 The Unified Model (UM) has additional dependencies, which need to be built as a second step. You will need access to the `code.metoffice.gov.uk` repository.
