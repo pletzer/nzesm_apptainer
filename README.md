@@ -14,11 +14,11 @@ First you need to have Apptainer or Singularity installed. If you're running Lin
 
 ## How to build a container
 
-A container needs a definition file, e.g. `conf/umenv_ubuntu1804.def`. This file lists the operating system, the compilers and the steps to build the libraries. It is a recipe for building the container.
+A container needs a definition file, e.g. `conf/umenv_intel.def`. This file lists the operating system, the compilers and the steps to build the libraries. It is a recipe for building the container.
 
 To build the container, type
 ```
-apptainer build umenv_ubuntu1804.sif conf/umenv_ubuntu1804.def
+apptainer build umenv_intel2004.sif conf/umenv_intel.def
 ```
 or, on a local laptop if you encounter the error `FATAL: ...permission denied`,
 ```
@@ -26,7 +26,7 @@ sudo -E apptainer build --force umenv_ubuntu1804.sif conf/umenv_ubuntu1804.def
 ```
 Now take a cup of coffee.
 
-Note: if you're using Singularity you may replace `apptainer` with `singularity` in the above commands.
+Note: if you're using Singularity you may replace `apptainer` with `singularity` in the above and below commands.
 
 ### Building the container on NeSI
 
@@ -53,10 +53,10 @@ export APPTAINER_TMPDIR="/nesi/nobackup/$SLURM_JOB_ACCOUNT/$USER/apptainer_tmpdi
 mkdir -p $APPTAINER_CACHEDIR $APPTAINER_TMPDIR
 setfacl -b $APPTAINER_TMPDIR
 
-apptainer build --force --fakeroot umenv_ubuntu1804.sif conf/umenv_ubuntu1804.def
+apptainer build --force --fakeroot umenv_intel2004.sif conf/umenv_def.def
 ```
 
-Once the build completes you will end up with a file `ummenv_ubuntu1804.sif`, which you can copy across platforms.
+Once the build completes you will end up with a file `ummenv_intel2004.sif`, which you can copy across platforms.
 
 ## How to run a shell within a container
 
@@ -82,28 +82,34 @@ Apptainer> rosie hello
 https://code.metoffice.gov.uk/rosie/u/hello: Hello alexanderpletzer
 ```
 
-## Turning on some services
-
-Some applications want to modify some directories inside the container. For instance, `cylc` may call the `at` tool to submit a task. To allow this, you need to:
-  1. Invoke `apptainer shell --fakeroot --writable-tmpfs umenv_ubuntu1804.sif` with the additional `--fakeroot --writable-tmpfs` options. Option `--writable-tmpfs` allows `at` to write to `/var`. The changes are temporary, however. You don't need to worry about making permanent changes to your container. `--fakeroot` is required because some commands should be executed by root.
-  2. Start the `atd` daemon inside the container, i.e. `service atd start`
-
-
-## Building GCOM and shum
+## Building GCOM
 
 The Unified Model (UM) has additional dependencies, which need to be built as a second step. You will need access to the `code.metoffice.gov.uk` repository.
 
-1. Copy the `umenv_ubuntu1804.sif` file to the the target platform (e.g. Mahuika)
+1. Copy the `umenv_intel2004.sif` file to the the target platform (e.g. Mahuika)
 2. `module load Apptainer`
-3. `apptainer shell umenv_ubuntu1804.sif`
-5. Inside the Apptainer shell type `um-setup`
+3. `apptainer shell umenv_intel2004.sif`
+5. Inside the Apptainer shell type
+```
+git clone git@github.com:pletzer/metomi-vms.git
+cd ~
+bash metomi-vms/usr/local/bin/build-gcom
+```
+This will install install GCOM under ~/gcom/install
 
-## Building and running the atmosphere
+
+## Building and running the atmosphere only
+
+Make sure you have the environment variable `UMDIR`, e.g.
+```
+export UMDIR=/opt/niwa/um_sys/um
+```
+to point to the location where the input data are stored.
 
 Check out the suite, compile and run it
 ```
-Apptainer> rosie checkout u-af836
-Apptainer> cd ~/roses/u-af836
+Apptainer> rosie checkout u-di148
+Apptainer> cd ~/roses/u-di148
 Apptainer> rose suite-run
 ```
 

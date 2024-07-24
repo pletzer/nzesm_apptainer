@@ -31,6 +31,12 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     git clone https://github.com/pletzer/metomi-vms.git /vagrant
 
     cd /vagrant
+    echo "> Replace vm -> apptainer in rose.conf files..."
+    for f in ./opt/metomi-site/etc/rose/rose.conf ./opt/metomi-site/etc/rose.conf.redhat ./opt/metomi-site/etc/rose.conf; do
+        sed -i 's/automatic\-options=SITE=vm/automatic\-options=SITE=apptainer/g' $f
+    done
+
+    cd /vagrant
     echo "> Build base...."
     bash -x install.sh ubuntu 2004 mosrs
 
