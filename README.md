@@ -70,6 +70,12 @@ Apptainer>
 ```
 In this environment, you should also have the commands `fcm`, `rose` and `cylc` available.
 
+Note that you may need to bind some directories to access external data inside the container. This is achieved with the `-B` option. For instance,
+
+```
+singularity shell -B/scale_wlg_nobackup/filesets/nobackup,/nesi/nobackup,$HOME,/opt/niwa /nesi/nobackup/pletzera/umenv_intel2004.sif
+```
+
 ## Caching your password
 
 Assuming that you have been given access to `https://code.metoffice.gov.uk`, you can cache your password using
