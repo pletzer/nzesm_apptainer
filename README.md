@@ -5,7 +5,7 @@ Definition files for creating an UM/NZESM Apptainer environment
 
 Containerisation allows you to compile code that can be easily ported from one platform to another (with some restrictions). As the name suggests, all the dependencies are contained -- there are no undefined references.
 
-The container `umenv_ubuntu1804` described below comes with an operating system, compilers (gfortran, gcc, g++), libraries (MPI, NetCDF) and tools (fcm, cylc 7 and 8, rose). It can be thought as a replacement for the 
+The container `umenv_intel2004` described below comes with an operating system, compilers, libraries (MPI, NetCDF) and tools (fcm, cylc 7 and 8, rose). It can be thought as a replacement for the 
 modules used on many high performance computers to load in dependencies (toolchain, NetCDF, etc).
 
 ## Prerequisites
@@ -22,7 +22,7 @@ apptainer build umenv_intel2004.sif conf/umenv_intel.def
 ```
 or, on a local laptop if you encounter the error `FATAL: ...permission denied`,
 ```
-sudo -E apptainer build --force umenv_ubuntu1804.sif conf/umenv_ubuntu1804.def
+sudo -E apptainer build --force umenv_intel2004.sif conf/umenv_intel.def
 ```
 Now take a cup of coffee.
 
@@ -62,7 +62,7 @@ Once the build completes you will end up with a file `ummenv_intel2004.sif`, whi
 
 Assuming you have loaded the `Apptainer` module on Mahuika (or have the command `apptainer` available on your system),
 ```
-apptainer shell umenv_ubuntu1804.sif
+apptainer shell umenv_intel2004.sif
 ```
 will land you in an environment with compilers
 ```
@@ -91,7 +91,7 @@ https://code.metoffice.gov.uk/rosie/u/hello: Hello alexanderpletzer
 ## Other setup files
 
 You will likely need to set up and edit the following files:
- 1. ~/.metomi/rese.conf
+ 1. ~/.metomi/rose.conf
  2. ~/.subversion/servers
 Please refer to the Metoffice documentation on how to set these files up.
 
@@ -118,6 +118,8 @@ Make sure you have the environment variable `UMDIR`, e.g.
 export UMDIR=/opt/niwa/um_sys/um
 ```
 to point to the location where the input data are stored.
+
+You will also need to check out vn10.7_niwa_xc50_port (TO DUCUMENT!!!)
 
 Check out the suite, compile and run it
 ```
@@ -161,14 +163,14 @@ int main(int argc, char** argv) {
     MPI_Finalize();
 }
 EOF
-apptainer exec umenv_ubuntu1804.sif mpicc myapp.c -o myapp
+apptainer exec umenv_intel2004.sif mpicc myapp.c -o myapp
 ```
 
 ## Running a containerised MPI application
 
 You can either leverage the MPI inside the application
 ```
-apptainer exec umenv_ubuntu1804.sif mpiexec -n 4 ./myapp
+apptainer exec umenv_intel2004.sif mpiexec -n 4 ./myapp
 ```
 or use the hosts's MPI. In the latter case, the MPI versions inside and on the host must be compatible. On NeSI's Mahuika we recommend to use the Intel MPI. In this case your SLURM script would look like:
 ```
@@ -190,7 +192,7 @@ ml Apptainer
 module load intel        # load the Intel MPI
 export I_MPI_FABRICS=ofi # turn off shm to run on multiple nodes
 
-srun apptainer exec -B /opt/slurm/lib64/ umenv_ubuntu1804.sif ./myapp
+srun apptainer exec -B /opt/slurm/lib64/ umenv_intel2004.sif ./myapp
 EOF
 sbatch myapp.sl
 ```
