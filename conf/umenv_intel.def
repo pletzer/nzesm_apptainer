@@ -45,7 +45,6 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     version="10.7"
     bash -x usr/local/bin/install-um-extras-intel -v ${version}
 
-    # OASIS-MTC
     cd /vagrant
     echo "> Install OASIS-MTC..."
     OASIS_MCT_VERSION="5.1"
@@ -60,7 +59,7 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.intel_intelmpi
     make -f TopMakefileOasis3 static-libs-fortran
     cp ../../INSTALL_OASIS/lib/*.a /usr/local/lib
-    # now module/include files to copy?
+    cp ../../INSTALL_OASIS/include/*.{h,mod} /usr/local/include
 
 
     cd /vagrant

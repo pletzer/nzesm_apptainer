@@ -4,7 +4,7 @@ CHAN            = MPI1
 # Paths for libraries, object files and binaries
 #
 # COUPLE        : path for oasis3-mct main directory
-COUPLE          = /software/oasis3-mct
+COUPLE          = /vagrant/oasis3-mct
 #
 # ARCHDIR       : directory created when compiling
  ARCHDIR        := $(COUPLE)/INSTALL_OASIS
@@ -17,8 +17,8 @@ MPILIB           = -L$(MPIDIR)/lib
 MPIRUN           = $(MPIBIN)/mpirun
 #
 # NETCDF library
-NETCDF_INCLUDE=/software/include
-NETCDF_LIBRARY  =  -Wl,-rpath,/software/lib -L/software/lib -lnetcdff -lnetcdf
+NETCDF_INCLUDE=/usr/local/include
+NETCDF_LIBRARY  =  -Wl,-rpath,/usr/local/lib -L/usr/local/lib -lnetcdff -lnetcdf
 #
 # Compiling and other commands
 MAKE        = make
