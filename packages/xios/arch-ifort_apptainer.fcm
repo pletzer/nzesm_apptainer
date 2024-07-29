@@ -17,4 +17,4 @@
 
 %CPP            mpiicc -EP
 %FPP            cpp -P
-%MAKE           gmake
+%MAKE           make

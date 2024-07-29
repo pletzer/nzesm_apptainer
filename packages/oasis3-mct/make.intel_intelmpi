@@ -21,7 +21,7 @@ NETCDF_INCLUDE=/software/include
 NETCDF_LIBRARY  =  -Wl,-rpath,/software/lib -L/software/lib -lnetcdff -lnetcdf
 #
 # Compiling and other commands
-MAKE        = gmake
+MAKE        = make
 F90         = $(MPIBIN)/mpiifort -I$(MPI_INCLUDE)
 F           = $(F90)
 f90         = $(F90)

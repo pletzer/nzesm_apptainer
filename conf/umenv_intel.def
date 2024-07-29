@@ -37,13 +37,44 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     done
 
     cd /vagrant
-    echo "> Build base...."
+    echo "> Build base..."
     bash -x install.sh ubuntu 2004 mosrs
 
     cd /vagrant
     echo "> Install UM dependencies (netcdf, grib/eccode, ...)"
     version="10.7"
     bash -x usr/local/bin/install-um-extras-intel -v ${version}
+
+    # OASIS-MTC
+    cd /vagrant
+    echo "> Install OASIS-MTC..."
+    OASIS_MCT_VERSION="5.1"
+    #git clone --branch OASIS3-MCT_$OASIS_MCT_VERSION https://gitlab.com/cerfacs/oasis3-mct.git
+    git clone https://gitlab.com/cerfacs/oasis3-mct.git
+    cd oasis3-mct
+    git fetch --all
+    git checkout OASIS3-MCT_$OASIS_MCT_VERSION
+    cd util/make_dir
+    rm -f make.inc make.intel_intelmpi
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.inc
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.intel_intelmpi
+    make -f TopMakefileOasis3 static-libs-fortran
+    cp ../../INSTALL_OASIS/lib/*.a /usr/local/lib
+    # now module/include files to copy?
+
+
+    cd /vagrant
+    echo "> Install XIOS..."
+    XIOS_VERSION="2024-05-21"
+    svn co -r{${XIOS_VERSION}} http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS
+    cd XIOS/arch
+    branch="xios"
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.env
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.fcm
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.path
+    cd ..
+    ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct
+
 
 
 
