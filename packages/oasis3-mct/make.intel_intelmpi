@@ -10,12 +10,7 @@ COUPLE          = $(OASISMCT_DIR)
  ARCHDIR        := $(COUPLE)/INSTALL_OASIS
 #
 # MPI library
-#MPIDIR           = /opt/intel/oneapi/mpi/2021.8.0/
-MPIDIR           = /opt/intel/oneapi/mpi/2021.6.0/
-MPIBIN           = $(MPIDIR)/bin
-MPI_INCLUDE      = $(MPIDIR)/include
-MPILIB           = -L$(MPIDIR)/lib
-MPIRUN           = $(MPIBIN)/mpirun
+MPIRUN           = mpirun
 #
 # NETCDF library
 NETCDF_INCLUDE=/usr/local/include
@@ -23,12 +18,12 @@ NETCDF_LIBRARY  =  -Wl,-rpath,/usr/local/lib -L/usr/local/lib -lnetcdff -lnetcdf
 #
 # Compiling and other commands
 MAKE        = make
-F90         = $(MPIBIN)/mpiifort -I$(MPI_INCLUDE)
+F90         = mpiifort
 F           = $(F90)
 f90         = $(F90)
 f           = $(F90)
-CC          = $(MPIBIN)/mpiicc -I$(MPI_INCLUDE)
-LD          = $(MPIBIN)/mpiifort $(MPILIB)
+CC          = mpiicc
+LD          = mpiifort
 # Static libraries compilation options
 STATOPT     =
 # Shared libraries options
