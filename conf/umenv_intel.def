@@ -45,6 +45,9 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     version="10.7"
     bash -x usr/local/bin/install-um-extras-intel -v ${version}
 
+    # some packages want gmake
+    ln -s /usr/bin/make /usr/bin/gmake
+
     cd /vagrant
     echo "> Install OASIS-MCT..."
     OASIS_MCT_VERSION="5.1"
