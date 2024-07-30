@@ -4,7 +4,7 @@ CHAN            = MPI1
 # Paths for libraries, object files and binaries
 #
 # COUPLE        : path for oasis3-mct main directory
-COUPLE          = $(OASISMTC_DIR)
+COUPLE          = $(OASISMCT_DIR)
 #
 # ARCHDIR       : directory created when compiling
  ARCHDIR        := $(COUPLE)/INSTALL_OASIS
