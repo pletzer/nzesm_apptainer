@@ -71,12 +71,16 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     XIOS_VERSION="2024-05-21"
     svn co -r{${XIOS_VERSION}} http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS
     cd XIOS/arch
-    branch="xios"
+    branch="main"
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.env
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.fcm
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.path
     cd ..
     ./make_xios --full --prod --arch ifort_apptainer --netcdf_lib netcdf4_seq --use_oasis oasis3_mct
+    mkdir -p /usr/local/XIOS/lib
+    cp lib/* /usr/local/XIOS/lib
+    mkdir -p /usr/local/XIOS/include
+    cp inc/* /usr/local/XIOS/include
 
 
 
