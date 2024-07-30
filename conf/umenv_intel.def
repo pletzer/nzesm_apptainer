@@ -59,8 +59,9 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.inc
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.intel_intelmpi
     make -f TopMakefileOasis3 static-libs-fortran
-    cp ../../INSTALL_OASIS/lib/*.a /usr/local/lib
-    cp ../../INSTALL_OASIS/include/*.{h,mod} /usr/local/include
+    cp -r ../../INSTALL_OASIS /usr/local/
+    #cp ../../INSTALL_OASIS/lib/*.a /usr/local/lib
+    #cp ../../INSTALL_OASIS/include/*.{h,mod} /usr/local/include
 
     cd /vagrant
     echo "> Install XIOS..."
