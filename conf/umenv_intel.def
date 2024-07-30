@@ -51,6 +51,7 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     #git clone --branch OASIS3-MCT_$OASIS_MCT_VERSION https://gitlab.com/cerfacs/oasis3-mct.git
     git clone https://gitlab.com/cerfacs/oasis3-mct.git
     cd oasis3-mct
+    export OASISMTC_DIR=$(pwd)
     git fetch --all
     git checkout OASIS3-MCT_$OASIS_MCT_VERSION
     cd util/make_dir

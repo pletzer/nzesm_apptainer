@@ -10,7 +10,8 @@ COUPLE          = $(OASISMCT_DIR)
  ARCHDIR        := $(COUPLE)/INSTALL_OASIS
 #
 # MPI library
-MPIDIR           = /opt/intel/oneapi/mpi/2021.8.0/
+#MPIDIR           = /opt/intel/oneapi/mpi/2021.8.0/
+MPIDIR           = /opt/intel/oneapi/mpi/2021.6.0/
 MPIBIN           = $(MPIDIR)/bin
 MPI_INCLUDE      = $(MPIDIR)/include
 MPILIB           = -L$(MPIDIR)/lib
