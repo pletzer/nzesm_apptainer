@@ -46,12 +46,12 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     bash -x usr/local/bin/install-um-extras-intel -v ${version}
 
     cd /vagrant
-    echo "> Install OASIS-MTC..."
+    echo "> Install OASIS-MCT..."
     OASIS_MCT_VERSION="5.1"
     #git clone --branch OASIS3-MCT_$OASIS_MCT_VERSION https://gitlab.com/cerfacs/oasis3-mct.git
     git clone https://gitlab.com/cerfacs/oasis3-mct.git
     cd oasis3-mct
-    export OASISMTC_DIR=$(pwd)
+    export OASISMCT_DIR=$(pwd)
     git fetch --all
     git checkout OASIS3-MCT_$OASIS_MCT_VERSION
     cd util/make_dir
@@ -61,7 +61,6 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     make -f TopMakefileOasis3 static-libs-fortran
     cp ../../INSTALL_OASIS/lib/*.a /usr/local/lib
     cp ../../INSTALL_OASIS/include/*.{h,mod} /usr/local/include
-
 
     cd /vagrant
     echo "> Install XIOS..."
