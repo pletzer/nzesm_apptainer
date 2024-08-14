@@ -119,12 +119,24 @@ export UMDIR=/opt/niwa/um_sys/um
 ```
 to point to the location where the input data are stored.
 
-You will also need to check out vn10.7_niwa_xc50_port (TO DUCUMENT!!!)
+Download the platform configuration
+```
+fcm co https://code.metoffice.gov.uk/svn/um/main/branches/dev/andrewpauling/r116716_vn10.7_nesi_apptainer_port
+```
+
+Build GCOM inside the container
+```
+Apptainer> build-gcom
+```
 
 Check out the suite, compile and run it
 ```
 Apptainer> rosie checkout u-di148
 Apptainer> cd ~/roses/u-di148
+```
+Update the `config_root_path` and `um_sources` variables in `$HOME/roses/u-di148/app/fcm_make/rose-app.conf`
+ to point to the path of your copy. Then type
+```
 Apptainer> rose suite-run
 ```
 

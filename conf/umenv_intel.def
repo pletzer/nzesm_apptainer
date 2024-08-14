@@ -81,6 +81,8 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     cp lib/* /usr/local/XIOS/lib
     mkdir -p /usr/local/XIOS/include
     cp inc/* /usr/local/XIOS/include
+    mkdir -p /usr/local/XIOS/bin
+    cp bin/* /usr/local/XIOS/bin
 
 
 
