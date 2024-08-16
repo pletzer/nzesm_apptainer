@@ -2,7 +2,7 @@
 %FCOMPILER           mpiifort
 %LINKER              mpiifort -nofor-main -qopenmp
 
-%BASE_CFLAGS    -std=c++11 -qopenmp
+%BASE_CFLAGS    -std=gnu++98 -D_GLIBCXX_USE_CXX11_ABI=0 -qopenmp
 %PROD_CFLAGS    -O3 -D BOOST_DISABLE_ASSERTS
 %DEV_CFLAGS     -g
 %DEBUG_CFLAGS   -DBZ_DEBUG -g -fno-inline
