@@ -104,7 +104,7 @@ The Unified Model (UM) has additional dependencies, which need to be built as a 
 3. `apptainer shell umenv_intel2004.sif`
 5. Inside the Apptainer shell type
 ```
-git clone git@github.com:pletzer/metomi-.git
+git clone git@github.com:pletzer/metomi-vms.git
 bash metomi-vms/usr/local/bin/build-gcom
 ```
 This will install install GCOM under ~/gcom/install
