@@ -57,7 +57,7 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     rm -f make.inc make.intel_intelmpi
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.inc
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.intel_intelmpi
-    make -f TopMakefileOasis3 static-libs-fortran
+    make -f TopMakefileOasis3
     cp -r ../../INSTALL_OASIS /usr/local/
     #cp ../../INSTALL_OASIS/lib/*.a /usr/local/lib
     #cp ../../INSTALL_OASIS/include/*.{h,mod} /usr/local/include
