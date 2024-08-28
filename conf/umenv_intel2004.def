@@ -50,14 +50,9 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
 
     cd /vagrant
     echo "> Install OASIS-MCT..."
-    OASIS_MCT_VERSION="5.1"
-    #git clone --branch OASIS3-MCT_$OASIS_MCT_VERSION https://gitlab.com/cerfacs/oasis3-mct.git
-    #git clone https://gitlab.com/cerfacs/oasis3-mct.git
     git clone -b UKMO_GC3_r1660 https://gitlab.com/cerfacs/oasis3-mct.git
     cd oasis3-mct
     export OASISMCT_DIR=$(pwd)
-    git fetch --all
-    git checkout OASIS3-MCT_$OASIS_MCT_VERSION
     cd util/make_dir
     rm -f make.inc make.intel_intelmpi
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/oasis3-mct/make.inc
@@ -69,8 +64,6 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
 
     cd /vagrant
     echo "> Install XIOS..."
-    #XIOS_VERSION="2024-05-21"
-    #svn co -r{${XIOS_VERSION}} http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS
     svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@952 XIOS
     cd XIOS/arch
     branch="main"

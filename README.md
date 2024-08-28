@@ -95,6 +95,40 @@ You will likely need to set up and edit the following files:
  2. ~/.subversion/servers
 Please refer to the Metoffice documentation on how to set these files up.
 
+In addition, you'll need the file `$HOME/.metomi/fcm/keyword.cfg`. An example is 
+```
+# UM repository keywords
+location{primary}[um.x] = https://code.metoffice.gov.uk/svn/um/main
+revision[um.x:vn13.5] = 123226
+location{primary}[um.xm] = https://code.metoffice.gov.uk/svn/um/main
+location{primary}[jules.xm] = https://code.metoffice.gov.uk/svn/jules/main
+location{primary}[socrates.xm] = https://code.metoffice.gov.uk/svn/socrates/main
+location{primary}[casim.xm] = https://code.metoffice.gov.uk/svn/monc/casim
+location{primary}[ukca.xm] = https://code.metoffice.gov.uk/svn/ukca/main
+location{primary}[um_aux.xm] = https://code.metoffice.gov.uk/svn/um/aux
+location{primary}[um_doc.xm] = https://code.metoffice.gov.uk/svn/um/doc
+location{primary}[um_meta.xm] = https://code.metoffice.gov.uk/svn/um/meta
+location{primary}[mule.xm] = https://code.metoffice.gov.uk/svn/um/mule
+location{primary}[moci.xm] = https://code.metoffice.gov.uk/svn/moci/main
+location{primary}[shumlib.xm] = https://code.metoffice.gov.uk/svn/utils/shumlib
+location{primary}[um.offline] = file:///home/pletzera/source/um/offline
+location{primary}[jules.offline] = file:///home/pletzera/source/jules/offline
+location{primary}[socrates.offline] = file:///home/pletzera/source/socrates/offline
+location{primary}[casim.offline] = file:///home/pletzera/source/casim/offline
+location{primary}[ukca.offline] = file:///home/pletzera/source/ukca/offline
+location{primary}[um_aux.offline] = file:///home/pletzera/source/um_aux/offline
+location{primary}[mule.offline] = file:///home/pletzera/source/mule/offline
+location{primary}[shumlib.offline] = file:///home/pletzera/source/shumlib/offline
+location{primary}[lfric_apps.x-tr] = https://code.metoffice.gov.uk/svn/lfric_apps/main/trunk
+location{primary}[lfric_apps.x-br] = https://code.metoffice.gov.uk/svn/lfric_apps/main/branches
+location{primary}[lfric.x-tr] = https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk
+location{primary}[lfric.x-br] = https://code.metoffice.gov.uk/svn/lfric/LFRic/branches
+# NEMO
+location{primary}[nemo] = http://forge.ipsl.jussieu.fr/nemo/svn #/trunk
+location{primary}[nemo.xm] = http://forge.ipsl.jussieu.fr/nemo/svn
+location{primary}[nemo.x] = http://forge.ipsl.jussieu.fr/nemo/svn
+```
+
 ## Building GCOM
 
 The Unified Model (UM) has additional dependencies, which need to be built as a second step. You will need access to the `code.metoffice.gov.uk` repository.
@@ -111,7 +145,7 @@ bash metomi-vms/usr/local/bin/build-gcom
 This will install install GCOM under ~/gcom/install
 
 
-## Building and running the atmosphere only
+## Building and running the atmosphere only (NOT TESTED)
 
 Make sure you have the environment variable `UMDIR`, e.g.
 ```
@@ -139,6 +173,26 @@ Update the `config_root_path` and `um_sources` variables in `$HOME/roses/u-di148
 ```
 Apptainer> rose suite-run
 ```
+
+## Building a coupled coupled ocean and atmospheric model
+
+On Mahuika
+```
+export PYTHONPATH=/opt/niwa/share/bin:/opt/nesi/share/bin:$PYTHONPATH
+export APPTAINERENV_PREPEND_PATH=/opt/nesi/share/bin
+export APPTAINERENV_PYTHONPATH=$PYTHONPATH 
+export CYLC_VERSION=8.1.4
+export UMDIR=/nesi/project/uoo03538/um
+module purge
+module load Apptainer/1.2.5
+apptainer shell /nesi/nobackup/pletzera/umenv_intel2004.sif
+```
+
+Then, in the container,
+```
+```
+
+
 
 ## How to compile an application using the containerised environment
 
