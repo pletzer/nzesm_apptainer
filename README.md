@@ -138,11 +138,11 @@ The Unified Model (UM) has additional dependencies, which need to be built as a 
 3. `apptainer shell umenv_intel2004.sif`
 5. Inside the Apptainer shell type
 ```
-git clone git@github.com:pletzer/metomi-vms.git
-cd ~
-bash metomi-vms/usr/local/bin/build-gcom
+fcm co fcm:gcom.x/branches/dev/andrewpauling/vn6.2_apptainer_port@1344 gcom-1344
+cd gcom-1344
+rose stem --group=test --name=gcom-1344 --new
 ```
-This will install install GCOM under ~/gcom/install
+This will install install GCOM under `~/cylc-run/gcom-1344/share/*/build/lib`.
 
 
 ## Building and running the atmosphere only (NOT TESTED)
