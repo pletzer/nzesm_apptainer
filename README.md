@@ -22,7 +22,7 @@ apptainer build umenv_intel2004.sif conf/umenv_intel.def
 ```
 or, on a local laptop if you encounter the error `FATAL: ...permission denied`,
 ```
-sudo -E apptainer build --force umenv_intel2004.sif conf/umenv_intel.def
+sudo apptainer build --force umenv_intel2004.sif conf/umenv_intel.def
 ```
 Now take a cup of coffee.
 
@@ -97,39 +97,72 @@ Please refer to the Metoffice documentation on how to set these files up.
 
 In addition, you'll need the file `$HOME/.metomi/fcm/keyword.cfg`. An example is 
 ```
-# UM repository keywords
-location{primary}[um.x] = https://code.metoffice.gov.uk/svn/um/main
-revision[um.x:vn13.5] = 123226
-location{primary}[um.xm] = https://code.metoffice.gov.uk/svn/um/main
-location{primary}[jules.xm] = https://code.metoffice.gov.uk/svn/jules/main
-location{primary}[socrates.xm] = https://code.metoffice.gov.uk/svn/socrates/main
-location{primary}[casim.xm] = https://code.metoffice.gov.uk/svn/monc/casim
-location{primary}[ukca.xm] = https://code.metoffice.gov.uk/svn/ukca/main
-location{primary}[um_aux.xm] = https://code.metoffice.gov.uk/svn/um/aux
-location{primary}[um_doc.xm] = https://code.metoffice.gov.uk/svn/um/doc
-location{primary}[um_meta.xm] = https://code.metoffice.gov.uk/svn/um/meta
-location{primary}[mule.xm] = https://code.metoffice.gov.uk/svn/um/mule
-location{primary}[moci.xm] = https://code.metoffice.gov.uk/svn/moci/main
-location{primary}[shumlib.xm] = https://code.metoffice.gov.uk/svn/utils/shumlib
-location{primary}[um.offline] = file:///home/pletzera/source/um/offline
-location{primary}[jules.offline] = file:///home/pletzera/source/jules/offline
-location{primary}[socrates.offline] = file:///home/pletzera/source/socrates/offline
-location{primary}[casim.offline] = file:///home/pletzera/source/casim/offline
-location{primary}[ukca.offline] = file:///home/pletzera/source/ukca/offline
-location{primary}[um_aux.offline] = file:///home/pletzera/source/um_aux/offline
-location{primary}[mule.offline] = file:///home/pletzera/source/mule/offline
-location{primary}[shumlib.offline] = file:///home/pletzera/source/shumlib/offline
-location{primary}[lfric_apps.x-tr] = https://code.metoffice.gov.uk/svn/lfric_apps/main/trunk
-location{primary}[lfric_apps.x-br] = https://code.metoffice.gov.uk/svn/lfric_apps/main/branches
-location{primary}[lfric.x-tr] = https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk
-location{primary}[lfric.x-br] = https://code.metoffice.gov.uk/svn/lfric/LFRic/branches
-# NEMO
 location{primary}[nemo] = http://forge.ipsl.jussieu.fr/nemo/svn #/trunk
 location{primary}[nemo.xm] = http://forge.ipsl.jussieu.fr/nemo/svn
 location{primary}[nemo.x] = http://forge.ipsl.jussieu.fr/nemo/svn
+
+location{primary}[um.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/main
+location{primary}[um.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/main/trunk
+location{primary}[um.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/main/branches
+
+location{primary}[um_mule.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/mule
+location{primary}[um_mule.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/mule/trunk
+location{primary}[um_mule.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/mule/branches
+
+location{primary}[um_meta.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/meta
+
+location{primary}[um_meta.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/meta/trunk
+
+location{primary}[um_meta.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/meta/branches
+
+location{primary}[jules.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/jules/main
+location{primary}[jules.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/jules/main/trunk
+location{primary}[jules.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/jules/main/branches
+
+location{primary}[socrates.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/socrates/main
+location{primary}[socrates.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/socrates/main/trunk
+location{primary}[socrates.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/socrates/main/branches
+
+location{primary}[um_aux.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/aux
+
+location{primary}[um_aux.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/aux/trunk
+
+location{primary}[um_aux.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/aux/branches
+
+location{primary}[ancil.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/main
+
+location{primary}[ancil.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/main/trunk
+
+location{primary}[ancil.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/main/branches
+
+location{primary}[ancil_data.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/data
+
+location{primary}[ancil_data.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/data/trunk
+
+location{primary}[ancil_data.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/data/branches
+
+location{primary}[ancil_contrib.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/contrib
+
+location{primary}[ancil_contrib.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/contrib/trunk
+
+location{primary}[ancil_contrib.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/contrib/branches
+
+location{primary}[roses-u.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/roses-u
+
+location{primary}[moci.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/moci/main
+
+location{primary}[moci.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/moci/main/trunk
+
+location{primary}[moci.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/moci/main/branches
+
+location{primary}[cice.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/cice/main
+
+location{primary}[cice.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/cice/main/trunk
+
+location{primary}[cice.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/cice/main/branches
 ```
 
-## Building GCOM (UM depenency)
+## Building GCOM (UM dependency)
 
 The Unified Model (UM) has additional dependencies, which need to be built as a second step. You will need access to the `code.metoffice.gov.uk` repository.
 
@@ -177,7 +210,7 @@ Apptainer> rose suite-run
 
 ## Building a coupled coupled ocean and atmospheric model
 
-These steps are required when running on Mahuika. First, start by creating file `$HOME/.cylc/global.cylc` with lines:
+These steps are required when running on Mahuika. First, start by creating file `$HOME/.cylc/flow/global.cylc` with lines:
 ```
 #!Jinja2
 
@@ -210,6 +243,7 @@ export APPTAINERENV_PYTHONPATH=$PYTHONPATH
 export CYLC_VERSION=8.1.4
 export UMDIR=/nesi/project/uoo03538/um
 module purge
+module load FCM
 module load Apptainer/1.2.5
 apptainer shell /nesi/nobackup/pletzera/umenv_intel2004.sif
 ```
@@ -219,7 +253,7 @@ Then, in the container,
 Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
 Apptainer> rosie co u-di415
 Apptainer> cd ~/roses/u-di415
-Apptainer> export PROJECT=niwa99999 # Set your project number here!
+Apptainer> export PROJECT=niwa99999 # Set your project number here! You should have a corresponding entry in ~/.cylc/projects
 Apptainer> cylc vip
 ```
 
