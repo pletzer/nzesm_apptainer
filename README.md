@@ -129,7 +129,7 @@ location{primary}[nemo.xm] = http://forge.ipsl.jussieu.fr/nemo/svn
 location{primary}[nemo.x] = http://forge.ipsl.jussieu.fr/nemo/svn
 ```
 
-## Building GCOM
+## Building GCOM (UM depenency)
 
 The Unified Model (UM) has additional dependencies, which need to be built as a second step. You will need access to the `code.metoffice.gov.uk` repository.
 
@@ -145,22 +145,23 @@ rose stem --group=test --name=gcom-1344 --new
 This will install install GCOM under `~/cylc-run/gcom-1344/share/*/build/lib`.
 
 
-## Building and running the atmosphere only (NOT TESTED)
+## Building and running the atmosphere only 
+
+Start a shell inside the container
+```
+apptainer shell /nesi/nobackup/pletzera/umenv_intel2004.sif
+```
 
 Make sure you have the environment variable `UMDIR`, e.g.
 ```
-export UMDIR=/opt/niwa/um_sys/um
+Apptainer> export UMDIR=/opt/niwa/um_sys/um
 ```
 to point to the location where the input data are stored.
 
 Download the platform configuration
 ```
-fcm co https://code.metoffice.gov.uk/svn/um/main/branches/dev/andrewpauling/r116716_vn10.7_nesi_apptainer_port
-```
-
-Build GCOM inside the container
-```
-Apptainer> build-gcom
+Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
+Apptainer> fcm co https://code.metoffice.gov.uk/svn/um/main/branches/dev/andrewpauling/r116716_vn10.7_nesi_apptainer_port
 ```
 
 Check out the suite, compile and run it
@@ -176,6 +177,31 @@ Apptainer> rose suite-run
 
 ## Building a coupled coupled ocean and atmospheric model
 
+These steps are required when running on Mahuika. First, start by creating file `$HOME/.cylc/global.cylc` with lines:
+```
+#!Jinja2
+
+# CYLC SITE CONFIGURATION DEFAULTS.
+
+#------------------------------------------------------------------------------
+# SSH
+# StrictHostKeyChecking=no: avoid the need for an initial manual ssh to
+# off-cluster hosts, for the interactive prompt to add it to .ssh/known_hosts.
+{% set SSH = "ssh -oBatchMode=yes -oConnectTimeout=8 -oStrictHostKeyChecking=no" %}
+
+#------------------------------------------------------------------------------
+# TASK JOB PLATFORMS
+[platforms]
+    [[mahuika01-background]]
+        hosts = mahuika01
+        job runner = background
+        install target = localhost
+        ssh command = {{SSH}}
+        [[[meta]]]
+             description = "For background jobs on mahuika login node."
+             note = "Slurm will run the job where it sees fit."
+```
+
 On Mahuika
 ```
 export PYTHONPATH=/opt/niwa/share/bin:/opt/nesi/share/bin:$PYTHONPATH
@@ -190,7 +216,13 @@ apptainer shell /nesi/nobackup/pletzera/umenv_intel2004.sif
 
 Then, in the container,
 ```
+Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
+Apptainer> rosie co u-di415
+Apptainer> cd ~/roses/u-di415
+Apptainer> export PROJECT=niwa99999 # Set your project number here!
+Apptainer> cylc vip
 ```
+
 
 
 
@@ -208,7 +240,7 @@ int main(int argc, char** argv) {
     // Initialize the MPI environment
     MPI_Init(NULL, NULL);
 
-    // Get the number of processes
+export PROJECT=    // Get the number of processes
     int world_size;
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
@@ -258,7 +290,7 @@ ml Apptainer
 module load intel        # load the Intel MPI
 export I_MPI_FABRICS=ofi # turn off shm to run on multiple nodes
 
-srun apptainer exec -B /opt/slurm/lib64/ umenv_intel2004.sif ./myapp
+srun apptainer exec umenv_intel2004.sif ./myapp
 EOF
 sbatch myapp.sl
 ```

@@ -52,6 +52,15 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     echo "> Install OASIS-MCT..."
     git clone -b UKMO_GC3_r1660 https://gitlab.com/cerfacs/oasis3-mct.git
     cd oasis3-mct
+
+    # patch lib/psmile/src/GPTLget_memusage.c (https://cerfacs.fr/site-oasis/forum/oa_main.php?c=177)
+    cp lib/psmile/src/GPTLget_memusage.c lib/psmile/src/GPTLget_memusage.c.ori
+    # the max pid number is wrong, on Linux get it
+    pid_max=$(cat /proc/sys/kernel/pid_max)
+    sed -i "s/\b999999\b/$pid_max/;" lib/psmile/src/GPTLget_memusage.c
+    echo "...patched lib/psmile/src/GPTLget_memusage.c"
+    #diff lib/psmile/src/GPTLget_memusage.c lib/psmile/src/GPTLget_memusage.c.ori
+
     export OASISMCT_DIR=$(pwd)
     cd util/make_dir
     rm -f make.inc make.intel_intelmpi
@@ -65,7 +74,7 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
 
     cd /vagrant
     echo "> Install XIOS..."
-    svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@952 XIOS
+    svn --non-interactive --trust-server-cert-failures="other,unknown-ca,cn-mismatch,expired" co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@952 XIOS
     cd XIOS/arch
     branch="main"
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/${branch}/packages/xios/arch-ifort_apptainer.env
