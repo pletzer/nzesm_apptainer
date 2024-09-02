@@ -40,8 +40,8 @@ CPPDEF    = -Duse_netCDF -Duse_comm_$(CHAN) -D__VERBOSE  -DTREAT_OVERLAY
 #
 # -g is necessary in F90FLAGS and LDFLAGS for pgf90 versions lower than 6.1
 #
-FCBASEFLAGS = -O2 -axCORE-AVX2,CORE-AVX512 -I. -assume byterecl -mt_mpi -qopenmp
-CCBASEFLAGS  = -O2 -qopenmp
+FCBASEFLAGS = -Ofast -mavx -axCORE-AVX2,CORE-AVX512 -I. -assume byterecl -mt_mpi -qopenmp
+CCBASEFLAGS  = -Ofast -mavx -axCORE-AVX2,CORE-AVX512 -qopenmp
 #
 # INC_DIR : includes all *mod for each library
  INC_DIR = -I$(ARCHDIR)/include
