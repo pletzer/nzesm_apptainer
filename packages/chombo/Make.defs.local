@@ -1,0 +1,32 @@
+makefiles+=Make.defs.local
+
+#default to MPI=TRUE,OPT=TRUE,DEBUG=FALSE 
+MPI=TRUE
+OPT=TRUE
+DEBUG=FALSE
+
+PRECISION = DOUBLE
+CXX=icc
+FC=ifort
+MPICXX=mpiicc
+USE_64=TRUE
+
+cxxdbgflags    = -g -fPIC
+cxxoptflags    = -fPIC -Ofast -mavx -axCORE-AVX2,CORE-AVX512
+fdbgflags     =  -g -fPIC
+foptflags     = -fPIC -Ofast -mavx -axCORE-AVX2,CORE-AVX512
+
+CH_CPP=$(CXX) -E -P 
+#cxxoptflags += -shared -fPIC 
+#foptflags += -shared -fPIC
+#ldoptflags += -dynamic
+#cxxoptflags +=  -O3 -mavx2  -ffast-math 
+#foptflags += -O3 -mavx2 -ffast-math -funroll-loops
+#XTRALDFLAGS += -Wl,-zmuldefs
+
+
+USE_HDF=TRUE
+HDFLIBFLAGS=   -L/usr/local/lib     -lhdf5 -lz
+HDFMPILIBFLAGS=-L/usr/local/lib     -lhdf5 -lz
+HDFINCFLAGS=   -I/usr/local/include 
+HDFMPIINCFLAGS=-I/usr/local/include
