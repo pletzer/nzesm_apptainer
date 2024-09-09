@@ -18,6 +18,9 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
 %post
 
     apt-get update && apt-get upgrade -y
+
+    # chombo needs csh
+    apt-get install -y csh
   
     # mosrs needs the killall command, available via pcmisc
     apt-get install -y wget file vim psmisc
@@ -91,6 +94,11 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     mkdir -p /usr/local/XIOS/bin
     cp bin/* /usr/local/XIOS/bin
 
-
+    # chombo
+    git clone https://github.com/applied-numerical-algorithms-group-lbnl/Chombo_3.2.git
+    cd Chombo_3.2/lib/mk
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/chombo/Make.defs.local
+    cd ..
+    make all
 
 
