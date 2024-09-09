@@ -175,6 +175,7 @@ in your `$HOME/.bashrc`.
 
 In your terminal, type
 ```
+cp /usr/local/XIOS/bin/xios_server.exe $HOME/bin
 export CYLC_VERSION=8.1.4
 export UMDIR=/nesi/project/uoo03538/um
 module purge
