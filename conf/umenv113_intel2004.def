@@ -95,6 +95,8 @@ From: intel/oneapi-hpckit:devel-ubuntu20.04
     cp bin/* /usr/local/XIOS/bin
 
     # chombo
+    cd /vagrant
+    echo "> Install Chombo"
     git clone https://github.com/applied-numerical-algorithms-group-lbnl/Chombo_3.2.git
     cd Chombo_3.2/lib/mk
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/chombo/Make.defs.local
