@@ -22,7 +22,7 @@ apptainer build umenv_intel2004.sif conf/umenv_intel.def
 ```
 or, on a local laptop if you encounter the error `FATAL: ...permission denied`,
 ```
-sudo apptainer build --force umenv_intel2004.sif conf/umenv_intel.def
+sudo -E apptainer build --force umenv_intel2004.sif conf/umenv_intel.def
 ```
 Now take a cup of coffee.
 
@@ -97,72 +97,39 @@ Please refer to the Metoffice documentation on how to set these files up.
 
 In addition, you'll need the file `$HOME/.metomi/fcm/keyword.cfg`. An example is 
 ```
+# UM repository keywords
+location{primary}[um.x] = https://code.metoffice.gov.uk/svn/um/main
+revision[um.x:vn13.5] = 123226
+location{primary}[um.xm] = https://code.metoffice.gov.uk/svn/um/main
+location{primary}[jules.xm] = https://code.metoffice.gov.uk/svn/jules/main
+location{primary}[socrates.xm] = https://code.metoffice.gov.uk/svn/socrates/main
+location{primary}[casim.xm] = https://code.metoffice.gov.uk/svn/monc/casim
+location{primary}[ukca.xm] = https://code.metoffice.gov.uk/svn/ukca/main
+location{primary}[um_aux.xm] = https://code.metoffice.gov.uk/svn/um/aux
+location{primary}[um_doc.xm] = https://code.metoffice.gov.uk/svn/um/doc
+location{primary}[um_meta.xm] = https://code.metoffice.gov.uk/svn/um/meta
+location{primary}[mule.xm] = https://code.metoffice.gov.uk/svn/um/mule
+location{primary}[moci.xm] = https://code.metoffice.gov.uk/svn/moci/main
+location{primary}[shumlib.xm] = https://code.metoffice.gov.uk/svn/utils/shumlib
+location{primary}[um.offline] = file:///home/pletzera/source/um/offline
+location{primary}[jules.offline] = file:///home/pletzera/source/jules/offline
+location{primary}[socrates.offline] = file:///home/pletzera/source/socrates/offline
+location{primary}[casim.offline] = file:///home/pletzera/source/casim/offline
+location{primary}[ukca.offline] = file:///home/pletzera/source/ukca/offline
+location{primary}[um_aux.offline] = file:///home/pletzera/source/um_aux/offline
+location{primary}[mule.offline] = file:///home/pletzera/source/mule/offline
+location{primary}[shumlib.offline] = file:///home/pletzera/source/shumlib/offline
+location{primary}[lfric_apps.x-tr] = https://code.metoffice.gov.uk/svn/lfric_apps/main/trunk
+location{primary}[lfric_apps.x-br] = https://code.metoffice.gov.uk/svn/lfric_apps/main/branches
+location{primary}[lfric.x-tr] = https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk
+location{primary}[lfric.x-br] = https://code.metoffice.gov.uk/svn/lfric/LFRic/branches
+# NEMO
 location{primary}[nemo] = http://forge.ipsl.jussieu.fr/nemo/svn #/trunk
 location{primary}[nemo.xm] = http://forge.ipsl.jussieu.fr/nemo/svn
 location{primary}[nemo.x] = http://forge.ipsl.jussieu.fr/nemo/svn
-
-location{primary}[um.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/main
-location{primary}[um.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/main/trunk
-location{primary}[um.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/main/branches
-
-location{primary}[um_mule.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/mule
-location{primary}[um_mule.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/mule/trunk
-location{primary}[um_mule.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/mule/branches
-
-location{primary}[um_meta.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/meta
-
-location{primary}[um_meta.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/meta/trunk
-
-location{primary}[um_meta.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/meta/branches
-
-location{primary}[jules.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/jules/main
-location{primary}[jules.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/jules/main/trunk
-location{primary}[jules.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/jules/main/branches
-
-location{primary}[socrates.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/socrates/main
-location{primary}[socrates.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/socrates/main/trunk
-location{primary}[socrates.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/socrates/main/branches
-
-location{primary}[um_aux.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/aux
-
-location{primary}[um_aux.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/aux/trunk
-
-location{primary}[um_aux.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/um/aux/branches
-
-location{primary}[ancil.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/main
-
-location{primary}[ancil.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/main/trunk
-
-location{primary}[ancil.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/main/branches
-
-location{primary}[ancil_data.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/data
-
-location{primary}[ancil_data.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/data/trunk
-
-location{primary}[ancil_data.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/data/branches
-
-location{primary}[ancil_contrib.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/contrib
-
-location{primary}[ancil_contrib.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/contrib/trunk
-
-location{primary}[ancil_contrib.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/ancil/contrib/branches
-
-location{primary}[roses-u.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/roses-u
-
-location{primary}[moci.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/moci/main
-
-location{primary}[moci.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/moci/main/trunk
-
-location{primary}[moci.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/moci/main/branches
-
-location{primary}[cice.xm] = file:///nesi/project/uoo03538/um/metoffice-science-repos/cice/main
-
-location{primary}[cice.xm_tr] = file:///nesi/project/uoo03538/um/metoffice-science-repos/cice/main/trunk
-
-location{primary}[cice.xm_br] = file:///nesi/project/uoo03538/um/metoffice-science-repos/cice/main/branches
 ```
 
-## Building GCOM (UM dependency)
+## Building GCOM
 
 The Unified Model (UM) has additional dependencies, which need to be built as a second step. You will need access to the `code.metoffice.gov.uk` repository.
 
@@ -171,30 +138,29 @@ The Unified Model (UM) has additional dependencies, which need to be built as a 
 3. `apptainer shell umenv_intel2004.sif`
 5. Inside the Apptainer shell type
 ```
-fcm co fcm:gcom.x/branches/dev/andrewpauling/vn6.2_apptainer_port@1344 gcom-1344
-cd gcom-1344
-rose stem --group=test --name=gcom-1344 --new
+git clone git@github.com:pletzer/metomi-vms.git
+cd ~
+bash metomi-vms/usr/local/bin/build-gcom
 ```
-This will install install GCOM under `~/cylc-run/gcom-1344/share/*/build/lib`.
+This will install install GCOM under ~/gcom/install
 
 
-## Building and running the atmosphere only 
-
-Start a shell inside the container
-```
-apptainer shell /nesi/nobackup/pletzera/umenv_intel2004.sif
-```
+## Building and running the atmosphere only (NOT TESTED)
 
 Make sure you have the environment variable `UMDIR`, e.g.
 ```
-Apptainer> export UMDIR=/opt/niwa/um_sys/um
+export UMDIR=/opt/niwa/um_sys/um
 ```
 to point to the location where the input data are stored.
 
 Download the platform configuration
 ```
-Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
-Apptainer> fcm co https://code.metoffice.gov.uk/svn/um/main/branches/dev/andrewpauling/r116716_vn10.7_nesi_apptainer_port
+fcm co https://code.metoffice.gov.uk/svn/um/main/branches/dev/andrewpauling/r116716_vn10.7_nesi_apptainer_port
+```
+
+Build GCOM inside the container
+```
+Apptainer> build-gcom
 ```
 
 Check out the suite, compile and run it
@@ -210,55 +176,72 @@ Apptainer> rose suite-run
 
 ## Building a coupled coupled ocean and atmospheric model
 
-These steps are required when running on Mahuika. First, start by creating file `$HOME/.cylc/flow/global.cylc` with lines:
+On Mahuika, you should have a file `$HOME/.cylc/projects` listing the NeSI project number to each experiment and you should have an entry 
 ```
-#!Jinja2
-
-# CYLC SITE CONFIGURATION DEFAULTS.
-
-#------------------------------------------------------------------------------
-# SSH
-# StrictHostKeyChecking=no: avoid the need for an initial manual ssh to
-# off-cluster hosts, for the interactive prompt to add it to .ssh/known_hosts.
-{% set SSH = "ssh -oBatchMode=yes -oConnectTimeout=8 -oStrictHostKeyChecking=no" %}
-
-#------------------------------------------------------------------------------
-# TASK JOB PLATFORMS
-[platforms]
-    [[mahuika01-background]]
-        hosts = mahuika01
-        job runner = background
-        install target = localhost
-        ssh command = {{SSH}}
-        [[[meta]]]
-             description = "For background jobs on mahuika login node."
-             note = "Slurm will run the job where it sees fit."
+u-di415 <project ID>
+```
+or alternatively
+```
+* <project ID>
 ```
 
-On Mahuika
+You'll also need to define the `mysrun` command to execute code within the container, e.g. by creating a script named `mysrun` in your `$HOME/bin` directory:
 ```
-export PYTHONPATH=/opt/niwa/share/bin:/opt/nesi/share/bin:$PYTHONPATH
+#!/usr/bin/bash
+
+echo "Executing srun apptainer exec /nesi/nobackup/pletzera/umenv_intel2004.sif $@"
+srun apptainer exec /nesi/nobackup/pletzera/umenv_intel2004.sif $@
+```
+
+Make sure, you have
+```
+/opt/nesi/share/etc/set-hpc-project
 export APPTAINERENV_PREPEND_PATH=/opt/nesi/share/bin
 export APPTAINERENV_PYTHONPATH=$PYTHONPATH 
+export PYTHONPATH=/opt/niwa/share/bin:/opt/nesi/share/bin:$PYTHONPATH
+```
+in your `$HOME/.bashrc`.
+
+In your terminal, type
+```
 export CYLC_VERSION=8.1.4
 export UMDIR=/nesi/project/uoo03538/um
 module purge
-module load FCM
 module load Apptainer/1.2.5
 apptainer shell /nesi/nobackup/pletzera/umenv_intel2004.sif
 ```
 
-Then, in the container,
+You should now land inside the container. Type
 ```
-Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
-Apptainer> rosie co u-di415
-Apptainer> cd ~/roses/u-di415
-Apptainer> export PROJECT=niwa99999 # Set your project number here! You should have a corresponding entry in ~/.cylc/projects
-Apptainer> cylc vip
+source /usr/local/bin/mosrs-setup-gpg-agent
 ```
+and enter your MetOffice password. Your password has been successfully cached if the follwoing command
+```
+rosie hello
+```
+does not require entering your password and succeeds.
 
+If for any reasons you need to re-cache your password, do
+```
+unset GPG_AGENT_INFO
+rm ~/.gnupg/S.gpg-agent
+ps -fu $USER | grep gpg
+```
+The `ps` command will display all the processes associated with `gpg`. Write down the process ID number that caches the password and kill it (`kill <pid>`).
 
+To start the compilation and executiuon of the coupled model
+```
+rosie co u-di415
+cd ~/roses/u-di415
+export PROJECT=<project ID>
+cylc vip
+```
+Note: the `project ID` should match the one listed in `$HOME/.cylc/projects` for this experiment (see above).
 
+You can monitor the progress of the compilation and execution by typing
+```
+cylc tui u-di415
+```
 
 ## How to compile an application using the containerised environment
 
@@ -274,7 +257,7 @@ int main(int argc, char** argv) {
     // Initialize the MPI environment
     MPI_Init(NULL, NULL);
 
-export PROJECT=    // Get the number of processes
+    // Get the number of processes
     int world_size;
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
@@ -324,7 +307,7 @@ ml Apptainer
 module load intel        # load the Intel MPI
 export I_MPI_FABRICS=ofi # turn off shm to run on multiple nodes
 
-srun apptainer exec umenv_intel2004.sif ./myapp
+srun apptainer exec -B /opt/slurm/lib64/ umenv_intel2004.sif ./myapp
 EOF
 sbatch myapp.sl
 ```
