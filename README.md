@@ -192,8 +192,9 @@ You'll also need to define the `mysrun` command to execute code within the conta
 echo "Executing srun apptainer exec /nesi/nobackup/pletzera/umenv_intel2004.sif $@"
 srun apptainer exec /nesi/nobackup/pletzera/umenv_intel2004.sif $@
 ```
+The `$HOME/bin/mysrun` should be executable (`chmod +x $HOME/bin/mysrun`) and `$HOME/bin` should be in PATH (`export PATH=$HOME/bin:$PATH`).
 
-Make sure, you have
+Make sure you have
 ```
 /opt/nesi/share/etc/set-hpc-project
 export APPTAINERENV_PREPEND_PATH=/opt/nesi/share/bin
@@ -233,7 +234,7 @@ To start the compilation and executiuon of the coupled model
 ```
 rosie co u-di415
 cd ~/roses/u-di415
-export PROJECT=<project ID>
+export PROJECT=<project ID> # TO CHECK OF THIS IS STILL NECESSARY
 cylc vip
 ```
 Note: the `project ID` should match the one listed in `$HOME/.cylc/projects` for this experiment (see above).
@@ -307,7 +308,7 @@ ml Apptainer
 module load intel        # load the Intel MPI
 export I_MPI_FABRICS=ofi # turn off shm to run on multiple nodes
 
-srun apptainer exec -B /opt/slurm/lib64/ umenv_intel2004.sif ./myapp
+srun apptainer exec umenv_intel2004.sif ./myapp
 EOF
 sbatch myapp.sl
 ```
