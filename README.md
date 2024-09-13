@@ -175,7 +175,6 @@ in your `$HOME/.bashrc`.
 
 In your terminal, type
 ```
-cp /usr/local/XIOS/bin/xios_server.exe $HOME/bin
 export CYLC_VERSION=8.1.4
 export UMDIR=/nesi/project/uoo03538/um
 module purge
@@ -185,6 +184,7 @@ apptainer shell /nesi/nobackup/pletzera/umenv_intel2004.sif
 
 You should now land inside the container. Type
 ```
+cp /usr/local/XIOS/bin/xios_server.exe $HOME/bin
 source /usr/local/bin/mosrs-setup-gpg-agent
 ```
 and enter your MetOffice password. Your password has been successfully cached if the follwoing command
