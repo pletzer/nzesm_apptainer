@@ -14,7 +14,7 @@ First you need to have Apptainer or Singularity installed. If you're running Lin
 
 ## How to build a container
 
-A container needs a definition file, e.g. `conf/umenv_intel.def`. This file lists the operating system, the compilers and the steps to build the libraries. It is a recipe for building the container.
+A container needs a definition file, e.g. `conf/umenv_intel2004.def`. This file lists the operating system, the compilers and the steps to build the libraries. It is a recipe for building the container.
 
 To build the container, type
 ```
