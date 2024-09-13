@@ -22,7 +22,7 @@ apptainer build umenv_intel2004.sif conf/umenv_intel2024.def
 ```
 or, on a local laptop if you encounter the error `FATAL: ...permission denied`,
 ```
-sudo -E apptainer build --force umenv_intel2004.sif conf/umenv_intel2024.def
+sudo apptainer build --force umenv_intel2004.sif conf/umenv_intel2024.def
 ```
 Now take a cup of coffee.
 
