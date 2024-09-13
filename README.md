@@ -129,6 +129,8 @@ location{primary}[nemo.xm] = http://forge.ipsl.jussieu.fr/nemo/svn
 location{primary}[nemo.x] = http://forge.ipsl.jussieu.fr/nemo/svn
 ```
 
+Note the entries `.xm` in the above pointing to `https` addresses. In principles, these should point to local mirrors. Using `https` addresses will work while mirrors are being set up, however.
+
 ## Building GCOM
 
 The Unified Model (UM) has additional dependencies, which need to be built as a second step. You will need access to the `code.metoffice.gov.uk` repository.
