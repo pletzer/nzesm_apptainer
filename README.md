@@ -170,8 +170,6 @@ Make sure you have
 ```
 /opt/nesi/share/etc/set-hpc-project
 export APPTAINERENV_PREPEND_PATH=/opt/nesi/share/bin
-export APPTAINERENV_PYTHONPATH=$PYTHONPATH 
-export PYTHONPATH=/opt/niwa/share/bin:/opt/nesi/share/bin:$PYTHONPATH
 ```
 in your `$HOME/.bashrc`.
 
@@ -207,7 +205,6 @@ To start the compilation and executiuon of the coupled model
 ```
 rosie co u-di415
 cd ~/roses/u-di415
-export PROJECT=<project ID> # TO CHECK OF THIS IS STILL NECESSARY
 cylc vip
 ```
 Note: the `project ID` should match the one listed in `$HOME/.cylc/projects` for this experiment (see above).
