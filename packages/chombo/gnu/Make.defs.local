@@ -1,0 +1,35 @@
+makefiles+=Make.defs.local
+
+#default to MPI=TRUE,OPT=TRUE,DEBUG=FALSE 
+MPI=TRUE
+OPT=TRUE
+DEBUG=FALSE
+
+#this seems to be the Cray way
+PRECISION = DOUBLE
+CXX=g++
+FC=gfortran
+MPICXX=mpicxx
+USE_64=TRUE
+
+# WES
+cxxdbgflags    = -g -fPIC
+cxxoptflags    = -fPIC -O2
+fdbgflags     =  -g -fPIC
+foptflags     = -fPIC -O3 -ffast-math -funroll-loops
+
+CH_CPP=$(CXX) -E -P 
+#cxxoptflags += -shared -fPIC 
+#foptflags += -shared -fPIC
+ldoptflags += -dynamic
+#cxxoptflags +=  -O3 -mavx2  -ffast-math 
+#foptflags += -O3 -mavx2 -ffast-math -funroll-loops
+#XTRALDFLAGS += -Wl,-zmuldefs
+
+
+# The appropriate module (cray-hdf5-parallel) must be loaded for this to work.
+USE_HDF=TRUE
+HDFLIBFLAGS=   -L$(HDF5_LIBDIR)  $(HDF_POST_LINK_OPTS)  -lhdf5 -lz
+HDFMPILIBFLAGS=-L$(HDF5_LIBDIR)  $(HDF_POST_LINK_OPTS)  -lhdf5 -lz
+HDFINCFLAGS=   -I$(HDF5_INCDIR) $(HDF_INCLUDE_OPTS)
+HDFMPIINCFLAGS=-I$(HDF5_INCDIR) $(HDF_INCLUDE_OPTS)
