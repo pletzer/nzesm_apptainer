@@ -129,6 +129,8 @@ location{primary}[nemo.xm] = http://forge.ipsl.jussieu.fr/nemo/svn
 location{primary}[nemo.x] = http://forge.ipsl.jussieu.fr/nemo/svn
 ```
 
+Note the entries `.xm` in the above pointing to `https` addresses. In principles, these should point to local mirrors. Using `https` addresses will work while mirrors are being set up, however.
+
 ## Building GCOM
 
 The Unified Model (UM) has additional dependencies, which need to be built as a second step. You will need access to the `code.metoffice.gov.uk` repository.
@@ -168,14 +170,11 @@ Make sure you have
 ```
 /opt/nesi/share/etc/set-hpc-project
 export APPTAINERENV_PREPEND_PATH=/opt/nesi/share/bin
-export APPTAINERENV_PYTHONPATH=$PYTHONPATH 
-export PYTHONPATH=/opt/niwa/share/bin:/opt/nesi/share/bin:$PYTHONPATH
 ```
 in your `$HOME/.bashrc`.
 
 In your terminal, type
 ```
-cp /usr/local/XIOS/bin/xios_server.exe $HOME/bin
 export CYLC_VERSION=8.1.4
 export UMDIR=/nesi/project/uoo03538/um
 module purge
@@ -185,6 +184,7 @@ apptainer shell /nesi/nobackup/pletzera/umenv_intel2004.sif
 
 You should now land inside the container. Type
 ```
+cp /usr/local/XIOS/bin/xios_server.exe $HOME/bin
 source /usr/local/bin/mosrs-setup-gpg-agent
 ```
 and enter your MetOffice password. Your password has been successfully cached if the follwoing command
@@ -205,7 +205,6 @@ To start the compilation and executiuon of the coupled model
 ```
 rosie co u-di415
 cd ~/roses/u-di415
-export PROJECT=<project ID> # TO CHECK OF THIS IS STILL NECESSARY
 cylc vip
 ```
 Note: the `project ID` should match the one listed in `$HOME/.cylc/projects` for this experiment (see above).
