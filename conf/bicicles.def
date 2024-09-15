@@ -1,0 +1,24 @@
+BootStrap: docker
+From: ubuntu:latest
+
+%help
+    Build a portable environment for the BICICLES code
+
+#%startscript
+    # do stuff
+
+%environment
+    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+%post
+
+    apt-get update && apt-get upgrade -y
+
+    echo "> Setting timezone to UTC non-interactively..."
+    ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+    apt-get install -y tzdata
+    dpkg-reconfigure --frontend noninteractive tzdata
+
+    apt-get install -y git vim perl csh python3 wget file subversion cmake automake 
+    apt-get install -y gcc gfortran g++ gcc
+    apt-get install -y openmpi-bin openmpi-common
