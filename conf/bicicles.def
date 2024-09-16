@@ -4,9 +4,13 @@ From: ubuntu:latest
 %help
     Build a portable environment for the BICICLES code
 
-#%startscript
-    # do stuff
+%startscript
+    mkdir -p /usr/local/build
 
+%files
+    # copy files from host to the container prior to calling %post
+    /home/pletzera/Chombo-3.2 /usr/local/build
+    
 %environment
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
@@ -19,6 +23,42 @@ From: ubuntu:latest
     apt-get install -y tzdata
     dpkg-reconfigure --frontend noninteractive tzdata
 
-    apt-get install -y git vim perl csh python3 wget file subversion cmake automake 
+    apt-get install -y git vim perl csh python3 wget file subversion cmake cmake-curses-gui automake 
     apt-get install -y gcc gfortran g++ gcc
     apt-get install -y openmpi-bin openmpi-common
+    apt-get install -y libnetcdf-pnetcdf-dev libhdf5-openmpi-dev
+    apt-get install -y libfftw3-dev libmkl-full-dev
+
+    # local copy of the code
+    export BISICLES_HOME=$HOME/bisicles_trunk
+    export BIKEFILES=$HOME/unicicles_files/
+    export HDF5_LIBDIR=/usr/lib/x86_64-linux-gnu/hdf5/openmpi/
+    export HDF5_INCDIR=/usr/include/hdf5/openmpi/
+
+    export BUILD_DIR=/usr/local/build
+    mkdir -p $BUILD_DIR
+
+    # chombo
+    cd $BUILD_DIR
+    # svn co https://anag-repo.lbl.gov/svn/Chombo/release/3.2 Chombo #requires an anag repository account
+    # the git repo is missing CoDimCopier.H
+    #git clone https://github.com/applied-numerical-algorithms-group-lbnl/Chombo_3.2.git
+    cd Chombo-3.2/lib
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/chombo/gnu/Make.defs.local
+    mv Make.defs.local mk/
+    # make all
+
+    # bisicles
+    cd $BUILD_DIR
+    git clone https://github.com/ggslc/bisicles-uob.git
+
+
+    # build cdriver wrapper
+
+
+    # build glimmer-cism
+
+    # build unicicles wrapper from github
+
+
+

@@ -14,22 +14,22 @@ USE_64=TRUE
 
 # WES
 cxxdbgflags    = -g -fPIC
-cxxoptflags    = -fPIC -O2
+cxxoptflags    = -fPIC -O3 -mavx2  -ffast-math
 fdbgflags     =  -g -fPIC
-foptflags     = -fPIC -O3 -ffast-math -funroll-loops
+foptflags     = -fPIC -O3 -mavx2 -ffast-math -funroll-loops
 
 CH_CPP=$(CXX) -E -P 
 #cxxoptflags += -shared -fPIC 
 #foptflags += -shared -fPIC
-ldoptflags += -dynamic
+#ldoptflags += -dynamic
 #cxxoptflags +=  -O3 -mavx2  -ffast-math 
 #foptflags += -O3 -mavx2 -ffast-math -funroll-loops
 #XTRALDFLAGS += -Wl,-zmuldefs
 
+MKL_LIBS=-L/usr/lib/x86_64-linux-gnu -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl
 
-# The appropriate module (cray-hdf5-parallel) must be loaded for this to work.
 USE_HDF=TRUE
-HDFLIBFLAGS=   -L$(HDF5_LIBDIR)  $(HDF_POST_LINK_OPTS)  -lhdf5 -lz
-HDFMPILIBFLAGS=-L$(HDF5_LIBDIR)  $(HDF_POST_LINK_OPTS)  -lhdf5 -lz
+HDFLIBFLAGS=   -L$(HDF5_LIBDIR)  $(HDF_POST_LINK_OPTS)  -lhdf5 -lz $(MKL_LIBS)
+HDFMPILIBFLAGS=-L$(HDF5_LIBDIR)  $(HDF_POST_LINK_OPTS)  -lhdf5 -lz $(MKL_LIBS)
 HDFINCFLAGS=   -I$(HDF5_INCDIR) $(HDF_INCLUDE_OPTS)
 HDFMPIINCFLAGS=-I$(HDF5_INCDIR) $(HDF_INCLUDE_OPTS)
