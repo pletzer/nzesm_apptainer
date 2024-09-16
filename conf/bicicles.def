@@ -29,11 +29,12 @@ From: ubuntu:latest
     apt-get install -y git vim perl csh python3 wget file subversion cmake cmake-curses-gui automake apt-file
     apt-get install -y gcc gfortran g++ gcc
     apt-get install -y openmpi-bin openmpi-common
-    apt-get install -y libnetcdf-pnetcdf-dev libhdf5-openmpi-dev libnetcdf-c++4-dev libnetcdf-dev 
+    apt-get install -y libnetcdf-pnetcdf-dev libhdf5-openmpi-dev libnetcdf-c++4-dev libnetcdf-dev libnetcdff-dev
     apt-get install -y libfftw3-dev libmkl-full-dev
 
+    ln -s /usr/bin/python3 /usr/bin/python
+
     # local copy of the code
-    export BISICLES_HOME=$HOME/bisicles_trunk
     export BIKEFILES=$HOME/unicicles_files/
     export HDF5_LIBDIR=/usr/lib/x86_64-linux-gnu/hdf5/openmpi/
     export HDF5_INCDIR=/usr/include/hdf5/openmpi/
@@ -42,8 +43,10 @@ From: ubuntu:latest
     export PYTHONLIBS=/usr/lib/python3.12
 
     export BUILD_DIR=/usr/local/build
-    mkdir -p $BUILD_DIR
     export BISICLES_HOME=$BUILD_DIR
+
+    mkdir -p $BUILD_DIR
+
 
     echo "\n\nBuilding chombo..."
     cd $BUILD_DIR
@@ -69,23 +72,23 @@ From: ubuntu:latest
     cd bisicles-uob/code/cdriver
     FC=gfortran make -f GNUmakefile ftestwrapper
 
-    # # build glimmer-cism
-    # cd $BUILD_DIR
-    # git clone https://github.com/ggslc/unicicles.git
-    # cd unicicles/glimmer-cism
-    # ./bootstrap
-    # cd ..
-    # mkdir parallel
-    # cd parallel
-    # FC=gfortran CXX=g++ \
-    # FCFLAGS="-fno-range-check -ffree-line-length-0 -DBISICLES_CDRIVER -DNO_RESCALE -fallow-argument-mismatch -fallow-invalid-boz -g -I$BISICLES_HOME/bisicles-uob/code/src " \
-    # LDFLAGS=" -L$BISICLES_HOME/bisicles-uob/code/lib -lBisicles2d.Linux.64.mpicxx.gfortran.OPT.MPI -lChomboLibs2d.Linux.64.mpicxx.gfortran.OPT.MPI -L$PYTHONLIBS -lstdc++ -lcrypt -lpthread -ldl -lutil -lm -lpython3.12" \
-    # ../glimmer-cism/configure \
-    # --with-netcdf-lib=$NETCDF_LIBDIR --with-netcdf-include=$NETCDF_INCDIR \
-    # --with-hdf5-lib=$HDF5_LIBDIR --with-hdf5-include \
-    # --enable-mpi --prefix=$PWD --disable-python
-    # make
-    # make install
+    echo "\n\nBuilding glimmer-cism..."
+    cd $BUILD_DIR
+    git clone https://github.com/ggslc/unicicles.git
+    cd unicicles/glimmer-cism
+    ./bootstrap
+    cd ..
+    mkdir parallel
+    cd parallel
+    FC=mpif90 CXX=g++ \
+    FCFLAGS="-fno-range-check -ffree-line-length-0 -DBISICLES_CDRIVER -DNO_RESCALE -fallow-argument-mismatch -fallow-invalid-boz -g -I$BISICLES_HOME/bisicles-uob/code/src " \
+    LDFLAGS=" -L$BISICLES_HOME/bisicles-uob/code/lib -lBisicles2d.Linux.64.mpicxx.gfortran.OPT.MPI -lChomboLibs2d.Linux.64.mpicxx.gfortran.OPT.MPI -lstdc++ -lcrypt -lpthread -ldl -lutil -lm " \
+    ../glimmer-cism/configure \
+    --with-netcdf-lib=$NETCDF_LIBDIR --with-netcdf-include=$NETCDF_INCDIR \
+    --with-hdf5-lib=$HDF5_LIBDIR --with-hdf5-include=$HDF5_INCDIR \
+    --enable-mpi --prefix=$PWD --disable-python
+    make
+    make install
 
     # # build unicicles wrapper from github
     # cd $BUILD_DIR/unicicles/wrappers/ukesm-ice_NETCDF
