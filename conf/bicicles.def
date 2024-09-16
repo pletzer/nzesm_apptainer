@@ -26,10 +26,10 @@ From: ubuntu:latest
     apt-get install -y tzdata
     dpkg-reconfigure --frontend noninteractive tzdata
 
-    apt-get install -y git vim perl csh python3 wget file subversion cmake cmake-curses-gui automake 
+    apt-get install -y git vim perl csh python3 wget file subversion cmake cmake-curses-gui automake apt-file
     apt-get install -y gcc gfortran g++ gcc
     apt-get install -y openmpi-bin openmpi-common
-    apt-get install -y libnetcdf-pnetcdf-dev libhdf5-openmpi-dev
+    apt-get install -y libnetcdf-pnetcdf-dev libhdf5-openmpi-dev libnetcdf-c++4-dev libnetcdf-dev 
     apt-get install -y libfftw3-dev libmkl-full-dev
 
     # local copy of the code
@@ -37,31 +37,37 @@ From: ubuntu:latest
     export BIKEFILES=$HOME/unicicles_files/
     export HDF5_LIBDIR=/usr/lib/x86_64-linux-gnu/hdf5/openmpi/
     export HDF5_INCDIR=/usr/include/hdf5/openmpi/
+    export NETCDF_LIBDIR=/usr/lib/x86_64-linux-gnu/
+    export NETCDF_INCDIR=/usr/include
+    export PYTHONLIBS=/usr/lib/python3.12
 
     export BUILD_DIR=/usr/local/build
     mkdir -p $BUILD_DIR
+    export BISICLES_HOME=$BUILD_DIR
 
-    # chombo
+    echo "\n\nBuilding chombo..."
     cd $BUILD_DIR
     # svn co https://anag-repo.lbl.gov/svn/Chombo/release/3.2 Chombo #requires an anag repository account
     # the git repo is missing CoDimCopier.H
     #git clone https://github.com/applied-numerical-algorithms-group-lbnl/Chombo_3.2.git
-    cd Chombo-3.2/lib
+    ln -s Chombo-3.2 Chombo
+    cd Chombo/lib
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/chombo/gnu/Make.defs.local
     mv Make.defs.local mk/
     make all
 
-    # # bisicles
-    # cd $BUILD_DIR
-    # git clone https://github.com/ggslc/bisicles-uob.git
-    # cd bisicles-uob/exec2D
-    # make clean
-    # make
+    echo "\n\nBuilding bisicles..."
+    cd $BUILD_DIR
+    git clone https://github.com/ggslc/bisicles-uob.git
+    cd bisicles-uob/code/exec2D
+    # this assumes that bisicles-uob and Chombo are checkout in the same directory
+    make clean
+    make
 
-    # # build cdriver wrapper
-    # cd $BUILD_DIR
-    # cd bisicles-uob/code/cdriver
-    # FC=gfortran make -f GNUmakefile.XXXX ftestwrapper
+    echo "\n\nBuilding cdriver wrapper..."
+    cd $BUILD_DIR
+    cd bisicles-uob/code/cdriver
+    FC=gfortran make -f GNUmakefile ftestwrapper
 
     # # build glimmer-cism
     # cd $BUILD_DIR
@@ -71,7 +77,13 @@ From: ubuntu:latest
     # cd ..
     # mkdir parallel
     # cd parallel
-    # FC=gfortran CXX=g++ FCFLAGS="-fno-range-check -ffree-line-length-0 -DBISICLES_CDRIVER -DNO_RESCALE  -fallow-argument-mismatch -fallow-invalid-boz -g -I$BISICLES_HOME/bisicles-uob/code/src " LDFLAGS=" -L$BISICLES_HOME/bisicles-uob/code/lib -lBisicles2d.Linux.64.CC.ftn.OPT.MPI -lChomboLibs2d.Linux.64.CC.ftn.OPT.MPI -L$PYTHONLIBS -lstdc++ -lcrypt -lpthread -ldl -lutil -lm -lpython3.9" ../glimmer-cism/configure --with-netcdf=$NETCDF_DIR --with-hdf5=$HDF5_DIR --enable-mpi --prefix=$PWD --disable-python
+    # FC=gfortran CXX=g++ \
+    # FCFLAGS="-fno-range-check -ffree-line-length-0 -DBISICLES_CDRIVER -DNO_RESCALE -fallow-argument-mismatch -fallow-invalid-boz -g -I$BISICLES_HOME/bisicles-uob/code/src " \
+    # LDFLAGS=" -L$BISICLES_HOME/bisicles-uob/code/lib -lBisicles2d.Linux.64.mpicxx.gfortran.OPT.MPI -lChomboLibs2d.Linux.64.mpicxx.gfortran.OPT.MPI -L$PYTHONLIBS -lstdc++ -lcrypt -lpthread -ldl -lutil -lm -lpython3.12" \
+    # ../glimmer-cism/configure \
+    # --with-netcdf-lib=$NETCDF_LIBDIR --with-netcdf-include=$NETCDF_INCDIR \
+    # --with-hdf5-lib=$HDF5_LIBDIR --with-hdf5-include \
+    # --enable-mpi --prefix=$PWD --disable-python
     # make
     # make install
 
