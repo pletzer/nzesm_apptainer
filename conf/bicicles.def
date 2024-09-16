@@ -4,11 +4,14 @@ From: ubuntu:latest
 %help
     Build a portable environment for the BICICLES code
 
-%startscript
-    mkdir -p /usr/local/build
+%setup
+    # create directory to build chombo and other packages in the container
+    mkdir -p ${APPTAINER_ROOTFS}/usr/local/build
 
 %files
     # copy files from host to the container prior to calling %post
+    # SOURCE DESTINATION. SOURCE is always on the host. DESTINATION is by default in container
+    # ADAPT!!!!!
     /home/pletzera/Chombo-3.2 /usr/local/build
     
 %environment
@@ -46,19 +49,34 @@ From: ubuntu:latest
     cd Chombo-3.2/lib
     wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/chombo/gnu/Make.defs.local
     mv Make.defs.local mk/
-    # make all
+    make all
 
-    # bisicles
-    cd $BUILD_DIR
-    git clone https://github.com/ggslc/bisicles-uob.git
+    # # bisicles
+    # cd $BUILD_DIR
+    # git clone https://github.com/ggslc/bisicles-uob.git
+    # cd bisicles-uob/exec2D
+    # make clean
+    # make
 
+    # # build cdriver wrapper
+    # cd $BUILD_DIR
+    # cd bisicles-uob/code/cdriver
+    # FC=gfortran make -f GNUmakefile.XXXX ftestwrapper
 
-    # build cdriver wrapper
+    # # build glimmer-cism
+    # cd $BUILD_DIR
+    # git clone https://github.com/ggslc/unicicles.git
+    # cd unicicles/glimmer-cism
+    # ./bootstrap
+    # cd ..
+    # mkdir parallel
+    # cd parallel
+    # FC=gfortran CXX=g++ FCFLAGS="-fno-range-check -ffree-line-length-0 -DBISICLES_CDRIVER -DNO_RESCALE  -fallow-argument-mismatch -fallow-invalid-boz -g -I$BISICLES_HOME/bisicles-uob/code/src " LDFLAGS=" -L$BISICLES_HOME/bisicles-uob/code/lib -lBisicles2d.Linux.64.CC.ftn.OPT.MPI -lChomboLibs2d.Linux.64.CC.ftn.OPT.MPI -L$PYTHONLIBS -lstdc++ -lcrypt -lpthread -ldl -lutil -lm -lpython3.9" ../glimmer-cism/configure --with-netcdf=$NETCDF_DIR --with-hdf5=$HDF5_DIR --enable-mpi --prefix=$PWD --disable-python
+    # make
+    # make install
 
-
-    # build glimmer-cism
-
-    # build unicicles wrapper from github
-
-
-
+    # # build unicicles wrapper from github
+    # cd $BUILD_DIR/unicicles/wrappers/ukesm-ice_NETCDF
+    # cp $BIKEFILES/Makefile.maui .
+    # make clean -f Makefile.maui
+    # make -f Makefile.maui
