@@ -21,20 +21,25 @@ From: ubuntu:latest
 
     apt-get update && apt-get upgrade -y
 
+    # May be required for rose/fcm... ?
     echo "> Setting timezone to UTC non-interactively..."
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime
     apt-get install -y tzdata
     dpkg-reconfigure --frontend noninteractive tzdata
 
     apt-get install -y git vim perl csh python3 wget file subversion cmake cmake-curses-gui automake apt-file
-    apt-get install -y gcc gfortran g++ gcc
+    apt-get install -y gcc gfortran g++
+
+    # need to check if we need the same MPI as UM
     apt-get install -y openmpi-bin openmpi-common
     apt-get install -y libnetcdf-pnetcdf-dev libhdf5-openmpi-dev libnetcdf-c++4-dev libnetcdf-dev libnetcdff-dev
+
+    # libmkl-full-dev is big, may want to break it into the components we need
     apt-get install -y libfftw3-dev libmkl-full-dev
 
     ln -s /usr/bin/python3 /usr/bin/python
 
-    # local copy of the code
+    # local copy of the code, want to get rid of
     export BIKEFILES=$HOME/unicicles_files/
 
     export HDF5_LIBDIR=/usr/lib/x86_64-linux-gnu/hdf5/openmpi/
