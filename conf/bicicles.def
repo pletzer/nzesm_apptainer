@@ -36,6 +36,7 @@ From: ubuntu:latest
 
     # local copy of the code
     export BIKEFILES=$HOME/unicicles_files/
+
     export HDF5_LIBDIR=/usr/lib/x86_64-linux-gnu/hdf5/openmpi/
     export HDF5_INCDIR=/usr/include/hdf5/openmpi/
     export NETCDF_LIBDIR=/usr/lib/x86_64-linux-gnu/
@@ -90,7 +91,7 @@ From: ubuntu:latest
     make
     make install
 
-    # # build unicicles wrapper from github
+    # echo "Building unicicles wrapper from github..."
     # cd $BUILD_DIR/unicicles/wrappers/ukesm-ice_NETCDF
     # cp $BIKEFILES/Makefile.maui .
     # make clean -f Makefile.maui
