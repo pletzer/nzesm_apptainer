@@ -53,7 +53,6 @@ From: ubuntu:latest
 
     mkdir -p $BUILD_DIR
 
-
     echo "\n\nBuilding chombo..."
     cd $BUILD_DIR
     # svn co https://anag-repo.lbl.gov/svn/Chombo/release/3.2 Chombo #requires an anag repository account
@@ -96,8 +95,10 @@ From: ubuntu:latest
     make
     make install
 
-    # echo "Building unicicles wrapper from github..."
-    # cd $BUILD_DIR/unicicles/wrappers/ukesm-ice_NETCDF
+    echo "Building unicicles wrapper from github..."
+    cd $BUILD_DIR/unicicles/wrappers/ukesm-ice_NETCDF
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/unicicles/wrappers/ukesm-ice_NETCDF/Makefile.gnu .
+    make -f Makefile.gnu
     # cp $BIKEFILES/Makefile.maui .
     # make clean -f Makefile.maui
     # make -f Makefile.maui
