@@ -1,20 +1,18 @@
 
-FC=gfortran
+FC=mpif90
 FCFLAGS=-fPIC
-CXX=g++
+CXX=mpicxx
 CC=gcc
 
-ICE_DIR=$BUILD_DIR/bisicles_gnu
+ICE_DIR=$(BUILD_DIR)/bisicles_gnu
 BIKE_CFG=2d.Linux.64.mpicxx.gfortran.OPT.MPI
 BIKE_DIR=/usr/local/build/bisicles-uob/code/
 BIKE_LIBS=-L$(BIKE_DIR)/lib/ -lBisicles$(BIKE_CFG) -lChomboLibs$(BIKE_CFG) -lstdc++ -L/usr/lib/python3.12/config-3.12-x86_64-linux-gnu/ -lpython3.12 -L/usr/lib/x86_64-linux-gnu/ -lfftw3
 
-GLIM_DIR=$(ICE_DIR)/cism/parallel
 GLIM_INC=-I$(GLIM_DIR)/include
 GLIM_LIBS=-L$(GLIM_DIR)/lib -lglint -lglide -lglimmer -lglimmer-solve -lglimmer-IO
-CDF_INC=-I$(NETCDF_DIR)/include
-CDF_LIBS=-L$(NETCDF_DIR)lib -L$(HDF5_DIR)/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lz
-HDF_LIBS=-L$(HDF5_DIR)/lib -lhdf5_hl -lhdf5 -lz
+CDF_INC=-I$(NETCDF_INCDIR)
+CDF_LIBS=-L$(NETCDF_LIBDIR) -lnetcdff -lnetcdf -L$(HDF5_LIBDIR) -lhdf5_hl -lhdf5 -lz
 
 
 all:	unicicles
@@ -25,7 +23,7 @@ OBJS=wrapper_mod.o gl_mod.o wrapper_main.o
 #FCFLAGS=-DNO_RESCALE -fPIE
 
 unicicles:  $(OBJS)
-	$(FC) $(FCFLAGS) -g3 -o unicicles $(OBJS) $(GLIM_LIBS) $(BIKE_LIBS) $(CDF_LIBS)
+	$(FC) $(FCFLAGS) -g3 -o unicicles $(OBJS) $(GLIM_LIBS) $(BIKE_LIBS) $(CDF_LIBS) -L/usr/lib/x86_64-linux-gnu/ -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -L/usr/lib/x86_64-linux-gnu/ -lmpi_cxx
 
 gl_mod.o:gl_mod.f90
 	$(FC) $(FCFLAGS) -g3 -free $(GLIM_INC) $(CDF_INC) -c gl_mod.f90

@@ -13,6 +13,7 @@ From: ubuntu:latest
     # SOURCE DESTINATION. SOURCE is always on the host. DESTINATION is by default in container
     # ADAPT!!!!!
     /home/pletzera/Chombo-3.2 /usr/local/build
+    /home/pletzera/bisicles_gnu /usr/local/build/bisicles_gnu
     
 %environment
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -50,6 +51,7 @@ From: ubuntu:latest
 
     export BUILD_DIR=/usr/local/build
     export BISICLES_HOME=$BUILD_DIR
+    export GLIM_DIR=/usr/local
 
     mkdir -p $BUILD_DIR
 
@@ -91,13 +93,14 @@ From: ubuntu:latest
     ../glimmer-cism/configure \
     --with-netcdf-lib=$NETCDF_LIBDIR --with-netcdf-include=$NETCDF_INCDIR \
     --with-hdf5-lib=$HDF5_LIBDIR --with-hdf5-include=$HDF5_INCDIR \
-    --enable-mpi --prefix=$PWD --disable-python
+    --enable-mpi --prefix=/usr/local/ --disable-python
     make
     make install
 
     echo "Building unicicles wrapper from github..."
     cd $BUILD_DIR/unicicles/wrappers/ukesm-ice_NETCDF
-    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/main/packages/unicicles/wrappers/ukesm-ice_NETCDF/Makefile.gnu .
+    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/refs/heads/main/packages/unicicles/wrappers/ukesm-ice_NETCDF/Makefile.gnu
+    make clean -f Makefile.gnu
     make -f Makefile.gnu
     # cp $BIKEFILES/Makefile.maui .
     # make clean -f Makefile.maui
