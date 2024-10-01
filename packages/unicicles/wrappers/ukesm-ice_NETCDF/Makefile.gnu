@@ -23,7 +23,7 @@ OBJS=wrapper_mod.o gl_mod.o wrapper_main.o
 #FCFLAGS=-DNO_RESCALE -fPIE
 
 unicicles:  $(OBJS)
-	$(FC) $(FCFLAGS) -g3 -o unicicles $(OBJS) $(GLIM_LIBS) $(BIKE_LIBS) $(CDF_LIBS) -L/usr/lib/x86_64-linux-gnu/ -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -L/usr/lib/x86_64-linux-gnu/ -lmpi_cxx
+	$(FC) $(FCFLAGS) -g3 -o unicicles $(OBJS) $(GLIM_LIBS) $(BIKE_LIBS) $(CDF_LIBS) -L/usr/lib/x86_64-linux-gnu/ -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -L/usr/lib/x86_64-linux-gnu/ -lmpicxx
 
 gl_mod.o:gl_mod.f90
 	$(FC) $(FCFLAGS) -g3 -free $(GLIM_INC) $(CDF_INC) -c gl_mod.f90
