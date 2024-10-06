@@ -24,7 +24,7 @@ OBJS=wrapper_mod.o gl_mod.o wrapper_main.o
 
 # GNU compiler with Intel MPI. For OpenMPI use -lmpi_cxx
 unicicles:  $(OBJS)
-	$(FC) $(FCFLAGS) -g3 -o unicicles $(OBJS) $(GLIM_LIBS) $(BIKE_LIBS) $(CDF_LIBS) -L/usr/lib/x86_64-linux-gnu/ -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -L/usr/lib/x86_64-linux-gnu/ -lmpicxx
+	$(FC) $(FCFLAGS) -g3 -o unicicles $(OBJS) $(GLIM_LIBS) $(BIKE_LIBS) $(CDF_LIBS) -L/usr/lib/x86_64-linux-gnu/ -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -L/usr/lib/x86_64-linux-gnu/ -lmpi_cxx
 
 gl_mod.o:gl_mod.f90
 	$(FC) $(FCFLAGS) -g3 -free $(GLIM_INC) $(CDF_INC) -c gl_mod.f90

@@ -7,13 +7,15 @@ From: ubuntu:latest
 %setup
     # create directory to build chombo and other packages in the container
     mkdir -p ${APPTAINER_ROOTFS}/usr/local/build
+    mkdir -p ${APPTAINER_ROOTFS}/opt/nzesm_apptainer
 
 %files
     # copy files from host to the container prior to calling %post
     # SOURCE DESTINATION. SOURCE is always on the host. DESTINATION is by default in container
     # ADAPT!!!!!
-    /home/pletzera/Chombo-3.2 /usr/local/build
-    /home/pletzera/bisicles_gnu /usr/local/build/bisicles_gnu
+    /home/cdjs/Chombo-3.2 /usr/local/build
+#    /home/pletzera/bisicles_gnu /usr/local/build/bisicles_gnu
+    packages/unicicles/wrappers/ukesm-ice_NETCDF/Makefile.gnu /opt/nzesm_apptainer/Makefile.gnu
     
 %environment
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -98,8 +100,16 @@ From: ubuntu:latest
     make install
 
     echo "Building unicicles wrapper from github..."
+    ls -l $BUILD_DIR
+    echo "2..."
+    ls -l $BUILD_DIR/unicicles
+    echo "3..."
+    ls -l $BUILD_DIR/unicicles/wrappers
+    echo "4..."
+    ls -l $BUILD_DIR/unicicles/wrappers/ukesm-ice_NETCDF
     cd $BUILD_DIR/unicicles/wrappers/ukesm-ice_NETCDF
-    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/refs/heads/main/packages/unicicles/wrappers/ukesm-ice_NETCDF/Makefile.gnu
+    cp /opt/nzesm_apptainer/Makefile.gnu .
+#    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/refs/heads/main/packages/unicicles/wrappers/ukesm-ice_NETCDF/Makefile.gnu
     make clean -f Makefile.gnu
     make -f Makefile.gnu
     # cp $BIKEFILES/Makefile.maui .
