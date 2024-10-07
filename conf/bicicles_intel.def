@@ -47,8 +47,6 @@ From: intel/hpckit:2024.2.1-0-devel-ubuntu22.04
     NETCDF_CXX_VERSION="4.3.1"
     PNETCDF_VERSION="1.12.3"
 
-    export WRF_DEPS_DIR=/software
-
     # compilers
     export CC=gcc
     export CXX=g++
