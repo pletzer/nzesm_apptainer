@@ -1,5 +1,5 @@
 BootStrap: docker
-From: ubuntu:latest
+From: intel/hpckit:2024.2.1-0-devel-ubuntu22.04
 
 %help
     Build a portable environment for the BICICLES code
@@ -7,13 +7,16 @@ From: ubuntu:latest
 %setup
     # create directory to build chombo and other packages in the container
     mkdir -p ${APPTAINER_ROOTFS}/usr/local/build
+    mkdir -p ${APPTAINER_ROOTFS}/opt/nzesm_apptainer
 
 %files
     # copy files from host to the container prior to calling %post
     # SOURCE DESTINATION. SOURCE is always on the host. DESTINATION is by default in container
     # ADAPT!!!!!
-    /home/pletzera/Chombo-3.2 /usr/local/build
-    /home/pletzera/bisicles_gnu /usr/local/build/bisicles_gnu
+    /home/cdjs/Chombo-3.2 /usr/local/build
+#    /home/pletzera/bisicles_gnu /usr/local/build/bisicles_gnu
+    packages/unicicles/wrappers/ukesm-ice_NETCDF/Makefile.gnu /opt/nzesm_apptainer/Makefile.gnu
+    packages/bisicles-uob/code/cdriver/GNUmakefile /opt/nzesm_apptainer/GNUmakefile
     
 %environment
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -28,32 +31,134 @@ From: ubuntu:latest
     apt-get install -y tzdata
     dpkg-reconfigure --frontend noninteractive tzdata
 
-    apt-get install -y git vim perl csh python3 wget file subversion cmake cmake-curses-gui automake apt-file
-    apt-get install -y gcc gfortran g++
-
-    # need to check if we need the same MPI as UM
-    apt-get install -y openmpi-bin openmpi-common
-    apt-get install -y libnetcdf-pnetcdf-dev libhdf5-openmpi-dev libnetcdf-c++4-dev libnetcdf-dev libnetcdff-dev
-
-    # libmkl-full-dev is big, may want to break it into the components we need
-    apt-get install -y libfftw3-dev libmkl-full-dev
+    apt-get install -y git vim perl csh python3 wget file subversion cmake cmake-curses-gui \
+                       automake apt-file libxml2-dev gcc gfortran g++ m4 curl libcurl4-openssl-dev \
+                       zlib1g zlib1g-dev libtool
 
     ln -s /usr/bin/python3 /usr/bin/python
+
+    export BUILD_DIR=/usr/local/build
+    mkdir -p $BUILD_DIR
+
+    # versions
+    HDF5_VERSION="1.12.2"
+    NETCDF_C_VERSION="4.9.2"
+    NETCDF_FORTRAN_VERSION="4.6.1"
+    NETCDF_CXX_VERSION="4.3.1"
+    PNETCDF_VERSION="1.12.3"
+
+    export WRF_DEPS_DIR=/software
+
+    # compilers
+    export CC=gcc
+    export CXX=g++
+    export FC=gfortran
+    export F77=gfortran
+    export MPICC=mpicc
+    export MPICXX=mpicxx
+    export MPIF77=mpif77
+    export MPIF90=mpif90
+
+    export NETCDF=/usr/local
+    export HDF5=/usr/local
+    export PNETCDF=/usr/local
+
+    # hdf5
+    cd $BUILD_DIR
+    HDF5_VERSION_SHORT=$(echo $HDF5_VERSION | awk -F '.' '{print $1"."$2}')
+    wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${HDF5_VERSION_SHORT}/hdf5-${HDF5_VERSION}/src/hdf5-${HDF5_VERSION}.tar.gz
+    tar xf hdf5-${HDF5_VERSION}.tar.gz
+    cd hdf5-${HDF5_VERSION}
+    mkdir build
+    cd build
+    CC=$MPICC FC=$MPIF90 ../configure --prefix=$HDF5 --enable-parallel --enable-fortran
+    make -j 4
+    make install
+    cd ../..
+    rm -rf hdf5-${HDF5_VERSION}
+    ls -l ${HDF5}/lib
+    ls -l ${HDF5}/include
+    ls -l ${HDF5}/bin
+
+    # netcdf-c
+    cd $BUILD_DIR
+    wget https://downloads.unidata.ucar.edu/netcdf-c/${NETCDF_C_VERSION}/netcdf-c-${NETCDF_C_VERSION}.tar.gz
+    tar xf netcdf-c-${NETCDF_C_VERSION}.tar.gz
+    cd netcdf-c-${NETCDF_C_VERSION}
+    mkdir build
+    cd build
+    CPPFLAGS="-I${HDF5}/include" \
+    LDFLAGS="-L${HDF5}/lib -lhdf5 -lhdf5_hl" \
+    CC=$MPICC ../configure --prefix=$NETCDF
+    make -j 4
+    make install
+    cd ../..
+    rm -rf netcdf-c-${NETCDF_C_VERSION}
+    ls -l ${NETCDF}/lib
+    ls -l ${NETCDF}/include
+    ls -l ${NETCDF}/bin
+
+    # netcdf-fortran
+    cd $BUILD_DIR
+    wget https://downloads.unidata.ucar.edu/netcdf-fortran/${NETCDF_FORTRAN_VERSION}/netcdf-fortran-${NETCDF_FORTRAN_VERSION}.tar.gz
+    tar xf netcdf-fortran-${NETCDF_FORTRAN_VERSION}.tar.gz
+    cd netcdf-fortran-${NETCDF_FORTRAN_VERSION}
+    mkdir build
+    cd build
+    CPPFLAGS="$(${NETCDF}/bin/nc-config --cflags)" LDFLAGS="$(${NETCDF}/bin/nc-config --libs)" \
+    ../configure --prefix=$NETCDF
+    make
+    make install
+    cd ../..
+    rm -rf netcdf-fortran-${NETCDF_FORTRAN_VERSION}
+    ls -l ${NETCDF}/lib
+    ls -l ${NETCDF}/include
+    ls -l ${NETCDF}/bin
+
+    # netcdf-c++
+    cd $BUILD_DIR
+    wget https://downloads.unidata.ucar.edu/netcdf-cxx/${NETCDF_CXX_VERSION}/netcdf-cxx4-${NETCDF_CXX_VERSION}.tar.gz
+    tar xf netcdf-cxx4-${NETCDF_CXX_VERSION}.tar.gz
+    cd netcdf-cxx4-${NETCDF_CXX_VERSION}
+    mkdir build
+    cd build
+    CC=$CC CXX=$CXX CPPFLAGS="$(${NETCDF}/bin/nc-config --cflags)" LDFLAGS="$(${NETCDF}/bin/nc-config --libs)" \
+    ../configure --prefix=$NETCDF
+    make
+    make install
+    cd ../..
+    rm -rf netcdf-cxx4-${NETCDF_CXX_VERSION}.tar.gz
+    ls -l ${NETCDF}/lib
+    ls -l ${NETCDF}/include
+    ls -l ${NETCDF}/bin
+
+    # pnetcdf
+    cd $BUILD_DIR
+    wget https://parallel-netcdf.github.io/Release/pnetcdf-${PNETCDF_VERSION}.tar.gz
+    tar xf pnetcdf-${PNETCDF_VERSION}.tar.gz
+    cd pnetcdf-${PNETCDF_VERSION}
+    mkdir build
+    cd build
+    ../configure --prefix=$PNETCDF --with-netcdf4=$NETCDF
+    make
+    make install
+    cd ../..
+    rm -rf pnetcdf-${PNETCDF_VERSION}.tar.gz
+    ls -l ${PNETCDF}/lib
+    ls -l ${PNETCDF}/include
+    ls -l ${PNETCDF}/bin
 
     # local copy of the code, want to get rid of
     export BIKEFILES=$HOME/unicicles_files/
 
-    export HDF5_LIBDIR=/usr/lib/x86_64-linux-gnu/hdf5/openmpi/
-    export HDF5_INCDIR=/usr/include/hdf5/openmpi/
-    export NETCDF_LIBDIR=/usr/lib/x86_64-linux-gnu/
-    export NETCDF_INCDIR=/usr/include
+    export HDF5_LIBDIR=/usr/local/lib
+    export HDF5_INCDIR=/usr/local/include
+    export NETCDF_LIBDIR=/usr/local/lib
+    export NETCDF_INCDIR=/usr/local/include
     export PYTHONLIBS=/usr/lib/python3.12
 
-    export BUILD_DIR=/usr/local/build
     export BISICLES_HOME=$BUILD_DIR
     export GLIM_DIR=/usr/local
-
-    mkdir -p $BUILD_DIR
 
     echo "\n\nBuilding chombo..."
     cd $BUILD_DIR
@@ -77,7 +182,8 @@ From: ubuntu:latest
     echo "\n\nBuilding cdriver wrapper..."
     cd $BUILD_DIR
     cd bisicles-uob/code/cdriver
-    FC=gfortran make -f GNUmakefile ftestwrapper
+    cp /opt/nzesm_apptainer/GNUmakefile GNUmakefile.apptainer
+    FC=gfortran make -f GNUmakefile.apptainer ftestwrapper
 
     echo "\n\nBuilding glimmer-cism..."
     cd $BUILD_DIR
@@ -99,7 +205,7 @@ From: ubuntu:latest
 
     echo "Building unicicles wrapper from github..."
     cd $BUILD_DIR/unicicles/wrappers/ukesm-ice_NETCDF
-    wget https://raw.githubusercontent.com/pletzer/nzesm_apptainer/refs/heads/main/packages/unicicles/wrappers/ukesm-ice_NETCDF/Makefile.gnu
+    cp /opt/nzesm_apptainer/Makefile.gnu .
     make clean -f Makefile.gnu
     make -f Makefile.gnu
     # cp $BIKEFILES/Makefile.maui .

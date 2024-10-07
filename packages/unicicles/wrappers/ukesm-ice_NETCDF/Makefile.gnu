@@ -7,7 +7,7 @@ CC=gcc
 ICE_DIR=$(BUILD_DIR)/bisicles_gnu
 BIKE_CFG=2d.Linux.64.mpicxx.gfortran.OPT.MPI
 BIKE_DIR=/usr/local/build/bisicles-uob/code/
-BIKE_LIBS=-L$(BIKE_DIR)/lib/ -lBisicles$(BIKE_CFG) -lChomboLibs$(BIKE_CFG) -lstdc++ -L/usr/lib/python3.12/config-3.12-x86_64-linux-gnu/ -lpython3.12 -L/usr/lib/x86_64-linux-gnu/ -lfftw3
+BIKE_LIBS=-L$(BIKE_DIR)/lib/ -lBisicles$(BIKE_CFG) -lChomboLibs$(BIKE_CFG) -lstdc++ -L/usr/lib/python3.10/config-3.10-x86_64-linux-gnu/ -lpython3.10 -L/usr/lib/x86_64-linux-gnu/
 
 GLIM_INC=-I$(GLIM_DIR)/include
 GLIM_LIBS=-L$(GLIM_DIR)/lib -lglint -lglide -lglimmer -lglimmer-solve -lglimmer-IO
@@ -24,7 +24,7 @@ OBJS=wrapper_mod.o gl_mod.o wrapper_main.o
 
 # GNU compiler with Intel MPI. For OpenMPI use -lmpi_cxx
 unicicles:  $(OBJS)
-	$(FC) $(FCFLAGS) -g3 -o unicicles $(OBJS) $(GLIM_LIBS) $(BIKE_LIBS) $(CDF_LIBS) -L/usr/lib/x86_64-linux-gnu/ -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -L/usr/lib/x86_64-linux-gnu/ -lmpi_cxx
+	$(FC) $(FCFLAGS) -g3 -o unicicles $(OBJS) $(GLIM_LIBS) $(BIKE_LIBS) $(CDF_LIBS) -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lmpicxx
 
 gl_mod.o:gl_mod.f90
 	$(FC) $(FCFLAGS) -g3 -free $(GLIM_INC) $(CDF_INC) -c gl_mod.f90
