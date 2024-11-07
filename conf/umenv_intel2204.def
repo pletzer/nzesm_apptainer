@@ -6,7 +6,14 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     Version 0.0.1
 
 %help
-    Build a portable environment for the Unified Model
+    Build a portable environment for the Unified Model with Chombo and unicicles
+
+%files
+# copy files from host to the container prior to calling %post
+# SOURCE DESTINATION. SOURCE is always on the host. DESTINATION is by default in container
+# ADAPT!!!!!
+/home/pletzera/Chombo-3.2 /usr/local/build
+/home/pletzera/bisicles_gnu /usr/local/build/bisicles_gnu
 
 #%startscript
     # start the atd d
@@ -20,7 +27,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     apt-get update && apt-get upgrade -y
   
     # mosrs needs the killall command, available via pcmisc
-    apt-get install -y wget file vim psmisc
+    apt-get install -y wget file vim psmisc csh cmake cmake-curses-gui automake apt-file
 
     echo "> Setting timezone to UTC non-interactively..."
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime
@@ -37,7 +44,7 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     done
 
     cd /vagrant
-    echo "> Build base..."
+    echo "> Build UM base..."
     bash -x install.sh ubuntu 2204 mosrs
 
     cd /vagrant
@@ -49,6 +56,8 @@ From: intel/oneapi-hpckit:devel-ubuntu22.04
     if ! [ -f /usr/bin/gmake ]; then
         ln -s /usr/bin/make /usr/bin/gmake
     fi
+
+
 
     cd /vagrant
     echo "> Install OASIS-MCT..."
