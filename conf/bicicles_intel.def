@@ -17,7 +17,7 @@ From: intel/hpckit:2024.2.1-0-devel-ubuntu22.04
     # SOURCE DESTINATION. SOURCE is always on the host. DESTINATION is by default in container
     # ADAPT!!!!!
     #/home/cdjs/Chombo-3.2 /usr/local/build
-    ${CHOMBO32_HOME} /usr/local/build
+    {{  CHOMBO32_HOME }} /usr/local/build
 #    /home/pletzera/bisicles_gnu /usr/local/build/bisicles_gnu
     packages/unicicles/wrappers/ukesm-ice_NETCDF/Makefile.gnu /opt/nzesm_apptainer/Makefile.gnu
     packages/bisicles-uob/code/cdriver/GNUmakefile /opt/nzesm_apptainer/GNUmakefile
