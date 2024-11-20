@@ -1,6 +1,9 @@
 BootStrap: docker
 From: intel/hpckit:2024.2.1-0-devel-ubuntu22.04
 
+%arguments
+    CHOMBO32_HOME=/home/pletzera/Chombo-3.2
+
 %help
     Build a portable environment for the BICICLES code
 
@@ -13,7 +16,8 @@ From: intel/hpckit:2024.2.1-0-devel-ubuntu22.04
     # copy files from host to the container prior to calling %post
     # SOURCE DESTINATION. SOURCE is always on the host. DESTINATION is by default in container
     # ADAPT!!!!!
-    /home/cdjs/Chombo-3.2 /usr/local/build
+    #/home/cdjs/Chombo-3.2 /usr/local/build
+    ${CHOMBO32_HOME} /usr/local/build
 #    /home/pletzera/bisicles_gnu /usr/local/build/bisicles_gnu
     packages/unicicles/wrappers/ukesm-ice_NETCDF/Makefile.gnu /opt/nzesm_apptainer/Makefile.gnu
     packages/bisicles-uob/code/cdriver/GNUmakefile /opt/nzesm_apptainer/GNUmakefile
@@ -46,6 +50,7 @@ From: intel/hpckit:2024.2.1-0-devel-ubuntu22.04
     NETCDF_FORTRAN_VERSION="4.6.1"
     NETCDF_CXX_VERSION="4.3.1"
     PNETCDF_VERSION="1.12.3"
+    FFTW_VERSION="3.3.10"
 
     # compilers
     export CC=gcc
@@ -60,6 +65,7 @@ From: intel/hpckit:2024.2.1-0-devel-ubuntu22.04
     export NETCDF=/usr/local
     export HDF5=/usr/local
     export PNETCDF=/usr/local
+    export FFTW=/usr/local
 
     # hdf5
     cd $BUILD_DIR
@@ -145,6 +151,22 @@ From: intel/hpckit:2024.2.1-0-devel-ubuntu22.04
     ls -l ${PNETCDF}/lib
     ls -l ${PNETCDF}/include
     ls -l ${PNETCDF}/bin
+
+    # fftw3
+    cd $BUILD_DIR
+    wget https://www.fftw.org/fftw-${FFTW_VERSION}.tar.gz
+    tar xf fftw-${FFTW_VERSION}.tar.gz
+    cd fftw-${FFTW_VERSION}
+    mkdir build 
+    cd build
+    MPICC=$MPICC FC=$FC ../configure --prefix=${FFTW} --enable-openmp --enable-mpi --enable-avx2 --enable-avx512
+    make -j 4
+    make install
+    cd ../..
+    rm -rf fftw-${FFTW_VERSION}.tar.gz
+    ls -l ${FFTW}/lib
+    ls -l ${FFTW}/include
+    ls -l ${FFTW}/bin
 
     # local copy of the code, want to get rid of
     export BIKEFILES=$HOME/unicicles_files/
