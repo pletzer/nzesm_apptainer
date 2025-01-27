@@ -146,7 +146,7 @@ bash metomi-vms/usr/local/bin/build-gcom
 ```
 This will install install GCOM under ~/gcom/install.
 
-## Building a coupled coupled ocean and atmospheric model
+## Building a coupled ocean and atmospheric model
 
 On Mahuika, you should have a file `$HOME/.cylc/projects` listing the NeSI project number to each experiment and you should have an entry 
 ```
