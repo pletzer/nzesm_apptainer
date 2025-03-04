@@ -1,5 +1,5 @@
 # nzesm_apptainer
-Definition files for creating an UM/NZESM Apptainer environment
+Definition files for creating a UM/NZESM Apptainer environment
 
 ## Introduction
 
